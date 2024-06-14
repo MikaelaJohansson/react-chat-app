@@ -42,14 +42,12 @@ const Login = () => {
         const token = response.data.token;
         const decoded = jwtDecode(token);
 
-        // Save decoded values to sessionStorage
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('user', JSON.stringify(decoded.user));
         sessionStorage.setItem('avatar', decoded.avatar);
-        
         console.log(decoded);
-        navigate('/Chat');
 
+        navigate('/Chat');
       } else {
         throw new Error('Failed to log in');
       }

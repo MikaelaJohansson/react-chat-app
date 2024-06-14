@@ -29,7 +29,7 @@ const Registration = () => {
           username: username,
           password: password,
           email: email,
-          avatar: avatar || 'https://i.pravatar.cc/200',
+          avatar: 'https://i.pravatar.cc/200',
           csrfToken
         }
       );
