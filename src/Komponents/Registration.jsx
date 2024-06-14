@@ -17,7 +17,7 @@ const Registration = () => {
         setCsrfToken(response.data.csrfToken);
       })
       .catch(error => {
-        console.error('Error fetching CSRF token:', error);
+        console.error('Fel vid hämtning av CSRF-token:', error);
       });
   }, []);
 
@@ -26,47 +26,41 @@ const Registration = () => {
       const response = await axios.post(
         'https://chatify-api.up.railway.app/auth/register',
         {
-          username,
-          password,
-          email,
-          avatar: avatar || 'https://i.pravatar.cc/200',
-          csrfToken
+          username:'username',
+          password:'password',
+          email:'email',
+          avatar: avatar || 'https://i.pravatar.cc/200', 
+          csrfToken 
         }
       );
 
       if (response.status === 201) {
-        console.log('User registered successfully:', response.data);
+        console.log('Användare registrerad framgångsrikt:', response.data);
         navigate('/login');
         setUsername('');
         setPassword('');
         setEmail('');
         setAvatar('');
       } else {
-        throw new Error('Failed to register user');
+        throw new Error('Misslyckades med att registrera användare');
       }
     } catch (error) {
-      console.error('Registration error:', error);
-
+      console.error('Registreringsfel:', error);
       if (error.response) {
         if (error.response.status === 400) {
           const errorMessage = error.response.data.error;
-
-          if (errorMessage.includes('Username')) {
-            setError('Användarnamnet finns redan.');
-          } else if (errorMessage.includes('Email')) {
-            setError('E-postadressen finns redan.');
-          } else if (errorMessage.includes('password')) {
-            setError('Lösenordet är ogiltigt.');
+          if (errorMessage.includes('Användarnamn') || 
+              errorMessage.includes('Lösenord') || 
+              errorMessage.includes('E-postadress')) {
+            setError('Vänligen fyll i alla obligatoriska fält.');
           } else {
-            setError('Ogiltig begäran. Försök igen.');
+            setError('Registreringen misslyckades. Försök igen senare.');
           }
-        } else if (error.response.status === 403 && error.response.data.error === 'Invalid CSRF token') {
-          setError('Ogiltig CSRF-token. Försök igen.');
         } else {
-          setError('Registrering misslyckades. Försök igen senare.');
+          setError('Registreringen misslyckades. Försök igen senare.');
         }
       } else {
-        setError('Något gick fel vid registreringen. Försök igen senare.');
+        setError('Nätverksfel. Kontrollera din internetanslutning.');
       }
     }
   };
@@ -74,7 +68,7 @@ const Registration = () => {
   return (
     <div>
       <header>
-        <h1>Snakis</h1>
+        <h1>Snackis</h1>
         <h2>Skapa ett konto</h2>
       </header>
       <section>
@@ -123,14 +117,18 @@ const Registration = () => {
         </p>
         <button type="submit" onClick={handleRegistration}>Registrera konto</button>
         <br />
-        <Link to="/">Har du redan ett konto?</Link>
-        {error && <p>{error}</p>}
+        <Link to="/login">Har du redan ett konto?</Link>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </section>
     </div>
   );
 };
 
 export default Registration;
+
+
+
+
 
 
 
