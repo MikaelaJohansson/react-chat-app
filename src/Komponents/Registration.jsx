@@ -26,11 +26,11 @@ const Registration = () => {
       const response = await axios.post(
         'https://chatify-api.up.railway.app/auth/register',
         {
-          username:'username',
-          password:'password',
-          email:'email',
-          avatar: avatar || 'https://i.pravatar.cc/200', 
-          csrfToken 
+          username: username,
+          password: password,
+          email: email,
+          avatar: avatar || 'https://i.pravatar.cc/200',
+          csrfToken
         }
       );
 

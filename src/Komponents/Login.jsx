@@ -26,7 +26,7 @@ const Login = () => {
   }, []);
 
   const handleLogin = async () => {
-    console.log('CSRF Token:', csrfToken); 
+   
     try {
       const response = await axios.post(
         'https://chatify-api.up.railway.app/auth/token',
@@ -41,7 +41,12 @@ const Login = () => {
         console.log('Login successful:', response.data);
         const token = response.data.token;
         const decoded = jwtDecode(token);
-        localStorage.setItem('token', response.data.token);
+
+        // Save decoded values to sessionStorage
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('user', JSON.stringify(decoded.user));
+        sessionStorage.setItem('avatar', decoded.avatar);
+        
         console.log(decoded);
         navigate('/Chat');
 
