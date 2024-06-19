@@ -38,6 +38,7 @@ const Login = () => {
       );
 
       if (response.status === 200) {
+
         console.log('Login successful:', response.data);
         const token = response.data.token;
         const decoded = jwtDecode(token);
@@ -45,9 +46,11 @@ const Login = () => {
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('user', JSON.stringify(decoded.user));
         sessionStorage.setItem('avatar', decoded.avatar);
+
         console.log(decoded);
 
         navigate('/Chat');
+
       } else {
         throw new Error('Failed to log in');
       }
