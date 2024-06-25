@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Offcanvas from './Offcanvas';
+import OffCanvas from './OffCanvas';
 import NewMessage from './NewMessage';
+import { jwtDecode } from "jwt-decode";
 
 const Chat = () => {
   const [user, setUser] = useState('');
@@ -19,6 +20,18 @@ const Chat = () => {
     fetchMessages();
     fetchUserMessages(); // Initial fetch of user-specific messages
   }, []);
+
+  useEffect(() => {
+    // This effect will trigger whenever allMessages array updates
+    // or when the component mounts initially
+    fetchMessages();
+  }, [allMessages]); // Dependency array ensures it runs when allMessages changes
+
+  useEffect(() => {
+    // This effect will trigger whenever userMessages array updates
+    // or when the component mounts initially
+    fetchUserMessages();
+  }, [userMessages]); // Dependency array ensures it runs when userMessages changes
 
   const fetchMessages = async () => {
     const token = sessionStorage.getItem('token');
@@ -64,7 +77,7 @@ const Chat = () => {
         throw new Error('Failed to fetch user messages');
       }
       const data = await response.json();
-      const userId = parseJwt(token).sub; // Assuming the user ID is stored in the 'sub' claim
+      const userId = jwtDecode(token).sub; // Using jwt-decode to decode JWT token
       const userSpecificMessages = data.filter(message => message.userId === userId);
       setUserMessages(userSpecificMessages);
     } catch (error) {
@@ -100,31 +113,39 @@ const Chat = () => {
     }
   };
 
-  const parseJwt = (token) => {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-      return JSON.parse(jsonPayload);
-    } catch (error) {
-      console.error('Error parsing JWT:', error);
-      return null;
+  const handleNewMessageSent = async (newMessage) => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      console.error('No token found. User is not authenticated.');
+      return;
     }
-  };
-
-  // Function to handle update after sending new message
-  const handleNewMessageSent = () => {
-    fetchUserMessages(); // Fetch user-specific messages after sending new message
+    try {
+      const response = await fetch('https://chatify-api.up.railway.app/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(newMessage)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+      const responseData = await response.json();
+      console.log('Message created successfully:', responseData);
+      // Trigger fetch of user-specific messages after sending new message
+      fetchUserMessages();
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
   return (
     <div className="sidenav">
-      <h1>Hej {user} kul att se dig igen</h1>
-      <img src={avatar} alt="Avatar" />
+      <h1>Hej {user}, kul att se dig igen</h1>
+      
       <br />
-      <Offcanvas user={user} avatar={avatar} />
+      <OffCanvas user={user} avatar={avatar} />
       <NewMessage onMessageSent={handleNewMessageSent} /> {/* Pass function to handle message sent */}
       <div className="messages-section">
         <h2>Alla Meddelanden</h2>
@@ -160,6 +181,11 @@ const Chat = () => {
 };
 
 export default Chat;
+
+
+
+
+
 
 
 
