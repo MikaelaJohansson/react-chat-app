@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import OffCanvas from './OffCanvas';
+
 import NewMessage from './NewMessage';
 import { jwtDecode } from "jwt-decode";
 
@@ -17,101 +18,101 @@ const Chat = () => {
       setUser(userFromSessionStorage);
       setAvatar(avatarFromSessionStorage);
     }
-    fetchMessages();
-    fetchUserMessages(); // Initial fetch of user-specific messages
+    // fetchMessages();
+    // fetchUserMessages(); // Initial fetch of user-specific messages
   }, []);
 
-  useEffect(() => {
-    // This effect will trigger whenever allMessages array updates
-    // or when the component mounts initially
-    fetchMessages();
-  }, [allMessages]); // Dependency array ensures it runs when allMessages changes
+  // useEffect(() => {
+  //   // This effect will trigger whenever allMessages array updates
+  //   // or when the component mounts initially
+  //   fetchMessages();
+  // }, [allMessages]); // Dependency array ensures it runs when allMessages changes
 
-  useEffect(() => {
-    // This effect will trigger whenever userMessages array updates
-    // or when the component mounts initially
-    fetchUserMessages();
-  }, [userMessages]); // Dependency array ensures it runs when userMessages changes
+  // useEffect(() => {
+  //   // This effect will trigger whenever userMessages array updates
+  //   // or when the component mounts initially
+  //   fetchUserMessages();
+  // }, [userMessages]); // Dependency array ensures it runs when userMessages changes
 
-  const fetchMessages = async () => {
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-      console.error('No token found. User is not authenticated.');
-      return;
-    }
-    try {
-      const response = await fetch('https://chatify-api.up.railway.app/messages', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch messages');
-      }
-      const data = await response.json();
-      setAllMessages(data);
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchMessages = async () => {
+  //   const token = sessionStorage.getItem('token');
+  //   if (!token) {
+  //     console.error('No token found. User is not authenticated.');
+  //     return;
+  //   }
+  //   try {
+  //     const response = await fetch('https://chatify-api.up.railway.app/messages', {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${token}`
+  //       }
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error('Failed to fetch messages');
+  //     }
+  //     const data = await response.json();
+  //     setAllMessages(data);
+  //   } catch (error) {
+  //     console.error('Error fetching messages:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  const fetchUserMessages = async () => {
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-      console.error('No token found. User is not authenticated.');
-      return;
-    }
-    try {
-      const response = await fetch('https://chatify-api.up.railway.app/messages', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch user messages');
-      }
-      const data = await response.json();
-      const userId = jwtDecode(token).sub; // Using jwt-decode to decode JWT token
-      const userSpecificMessages = data.filter(message => message.userId === userId);
-      setUserMessages(userSpecificMessages);
-    } catch (error) {
-      console.error('Error fetching user messages:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchUserMessages = async () => {
+  //   const token = sessionStorage.getItem('token');
+  //   if (!token) {
+  //     console.error('No token found. User is not authenticated.');
+  //     return;
+  //   }
+  //   try {
+  //     const response = await fetch('https://chatify-api.up.railway.app/messages', {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${token}`
+  //       }
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error('Failed to fetch user messages');
+  //     }
+  //     const data = await response.json();
+  //     const userId = jwtDecode(token).sub; // Using jwt-decode to decode JWT token
+  //     const userSpecificMessages = data.filter(message => message.userId === userId);
+  //     setUserMessages(userSpecificMessages);
+  //   } catch (error) {
+  //     console.error('Error fetching user messages:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  const deleteAllUserMessages = async () => {
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-      console.error('No token found. User is not authenticated.');
-      return;
-    }
-    try {
-      const deletePromises = allMessages.map(async (message) => {
-        const response = await fetch(`https://chatify-api.up.railway.app/messages/${message.id}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        if (!response.ok) {
-          throw new Error(`Failed to delete message with ID ${message.id}`);
-        }
-      });
-      await Promise.all(deletePromises);
-      setUserMessages([]);
-      console.log('All user messages deleted successfully.');
-    } catch (error) {
-      console.error('Error deleting user messages:', error);
-    }
-  };
+  // const deleteAllUserMessages = async () => {
+  //   const token = sessionStorage.getItem('token');
+  //   if (!token) {
+  //     console.error('No token found. User is not authenticated.');
+  //     return;
+  //   }
+  //   try {
+  //     const deletePromises = allMessages.map(async (message) => {
+  //       const response = await fetch(`https://chatify-api.up.railway.app/messages/${message.id}`, {
+  //         method: 'DELETE',
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       });
+  //       if (!response.ok) {
+  //         throw new Error(`Failed to delete message with ID ${message.id}`);
+  //       }
+  //     });
+  //     await Promise.all(deletePromises);
+  //     setUserMessages([]);
+  //     console.log('All user messages deleted successfully.');
+  //   } catch (error) {
+  //     console.error('Error deleting user messages:', error);
+  //   }
+  // };
 
   const handleNewMessageSent = async (newMessage) => {
     const token = sessionStorage.getItem('token');
@@ -147,7 +148,7 @@ const Chat = () => {
       <br />
       <OffCanvas user={user} avatar={avatar} />
       <NewMessage onMessageSent={handleNewMessageSent} /> {/* Pass function to handle message sent */}
-      <div className="messages-section">
+      {/* <div className="messages-section">
         <h2>Alla Meddelanden</h2>
         {loading ? (
           <p>Laddar...</p>
@@ -174,8 +175,8 @@ const Chat = () => {
             ))}
           </ul>
         )}
-        <button onClick={deleteAllUserMessages}>Radera Dina Meddelanden</button>
-      </div>
+        <button onClick={deleteAllUserMessages}>Radera Dina Meddelanden</button> */}
+      {/* </div> */}
     </div>
   );
 };

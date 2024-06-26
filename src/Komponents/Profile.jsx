@@ -2,11 +2,12 @@ import React, { useState, useCallback, useEffect } from 'react';
 import debounce from 'lodash.debounce';
 
 const Profile = () => {
-  const AvatarImg = sessionStorage.getItem('avatar');
+  const defaultAvatar = '/img/avatar.png'; // Relativ sökväg till standardavataren
+  const AvatarImg = sessionStorage.getItem('avatar') || defaultAvatar;
   const UserEmail = sessionStorage.getItem('email');
-  const UserName = sessionStorage.getItem('user'); // Fallback to 'user' if 'username' is missing
+  const UserName = sessionStorage.getItem('username') || sessionStorage.getItem('user');
 
-  const [oldAvatar, setOldAvatar] = useState(AvatarImg || '');
+  const [oldAvatar, setOldAvatar] = useState(AvatarImg);
   const [newAvatarFile, setNewAvatarFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [email, setEmail] = useState(UserEmail || '');
@@ -45,42 +46,30 @@ const Profile = () => {
     if (preview) {
       setOldAvatar(preview);
       sessionStorage.setItem('avatar', preview);
+      sessionStorage.setItem('email', editedEmail);
+      sessionStorage.setItem('username', editedUsername);
+      setEmail(editedEmail);
+      setUsername(editedUsername);
+      window.location.href = '/Chat'; // Navigate to Chat component
     }
-    sessionStorage.setItem('email', editedEmail);
-    sessionStorage.setItem('username', editedUsername);
-    setEmail(editedEmail);
-    setUsername(editedUsername);
-    window.location.href = '/Chat'; // Navigate to Chat component
   };
 
   return (
     <div className="App">
-      <h1>Profile Settings</h1>
-
-      {/* Display old avatar */}
-      <div className="avatar-container">
-        <h2>Current Avatar</h2>
-        <img src={oldAvatar} alt="Current Avatar" className="avatar" style={{ maxWidth: '20%', height: 'auto' }} />
-      </div>
-
-      {/* Display old email and username */}
-      <div className="old-info">
-        <h2>Old Email</h2>
-        <p>{email}</p>
-        <h2>Old Username</h2>
-        <p>{username}</p>
-      </div>
-
+      <h1>Uppdatera din profil</h1>
+      <div className="preview-container">
+          <img 
+            src={preview || defaultAvatar} 
+            alt="Preview Avatar" 
+            className="avatar-preview" 
+            style={{ maxWidth: '20%', height: 'auto' }} 
+          />
+        </div>
       {/* Upload new avatar */}
       <div className="upload-container">
-        <h2>Upload New Avatar</h2>
+        <h3>Upload New Avatar</h3>
         <input type="file" accept="image/*" onChange={handleFileChange} />
-        {preview && (
-          <div className="preview-container">
-            <h2>Preview</h2>
-            <img src={preview} alt="Preview Avatar" className="avatar-preview" style={{ maxWidth: '20%', height: 'auto' }} />
-          </div>
-        )}
+      
       </div>
 
       {/* Edit email */}
@@ -102,7 +91,7 @@ const Profile = () => {
           onChange={(e) => setEditedUsername(e.target.value)}
         />
       </div>
-
+      <br />
       {/* Approve and save changes */}
       <button onClick={handleApprove}>Approve and Save Changes</button>
     </div>
@@ -110,6 +99,8 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
 
 
 
