@@ -14,6 +14,8 @@ const OffCanvas = ({ user, avatar }) => {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('avatar');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('id');
     window.location.href = '/login';
   };
 

@@ -47,6 +47,7 @@ const Login = () => {
         sessionStorage.setItem('user', JSON.stringify(decoded.user));
         sessionStorage.setItem('email', JSON.stringify(decoded.email));
         sessionStorage.setItem('avatar', decoded.avatar);
+        sessionStorage.setItem('id', decoded.id);
 
         console.log(decoded);
 
