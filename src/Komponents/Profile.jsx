@@ -40,6 +40,8 @@ const Profile = () => {
 
   const handleApprove = async () => {
     const token = sessionStorage.getItem('token');
+    
+
 
     console.log('Sending data:', {
       userId: UserId,
@@ -60,7 +62,7 @@ const Profile = () => {
     };
 
     try {
-      const response = await axios.put('https://chatify-api.up.railway.app/user', data, {
+      const response = await axios.put('https://chatify-api.up.railway.app/user   ', data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -97,6 +99,7 @@ const Profile = () => {
         },
       });
       console.log('User account deleted successfully', response.data);
+      alert('Your account has been successfully deleted.');
       sessionStorage.clear();
       window.location.href = '/Login';
     } catch (error) {

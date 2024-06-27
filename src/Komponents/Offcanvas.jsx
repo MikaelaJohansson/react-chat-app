@@ -11,11 +11,7 @@ const OffCanvas = ({ user, avatar }) => {
   const handleShow = () => setShow(true);
 
   const handleLogout = () => {
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('avatar');
-    sessionStorage.removeItem('email');
-    sessionStorage.removeItem('id');
+    sessionStorage.clear();
     window.location.href = '/login';
   };
 

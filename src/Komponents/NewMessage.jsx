@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
 
-const NewMessage = ({ onMessageSent }) => {
+
+const NewMessage = ({ onMessageSent, conversationId }) => {
   const [message, setMessage] = useState('');
 
   const sendNewMessage = () => {
@@ -9,7 +10,7 @@ const NewMessage = ({ onMessageSent }) => {
 
     const messagePayload = {
       text: sanitizedMessage,
-      conversationId: '', // Ensure conversationId is set correctly
+      conversationId: conversationId, // Ensure conversationId is set correctly
       userId: getUserIdFromToken() // Assuming you have a function to get userId from JWT token
     };
 
@@ -45,11 +46,7 @@ const NewMessage = ({ onMessageSent }) => {
   };
 
   const getUserIdFromToken = () => {
-    // Implement a function to decode the JWT token and extract the user ID
-    // This function should parse the JWT token stored in sessionStorage
-    // and return the user ID.
     const token = sessionStorage.getItem('token');
-    // Example parsing function (replace with your actual implementation):
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
@@ -75,6 +72,9 @@ const NewMessage = ({ onMessageSent }) => {
 };
 
 export default NewMessage;
+
+
+
 
 
 
