@@ -22,6 +22,7 @@ const NewMessage = ({ onMessageSent }) => {
     };
 
     console.log('Message being sent:', messagePayload);
+    console.log('Message being sent is sanitizedMessage');
 
     if (!token) {
       console.error('No token found. User is not authenticated.');

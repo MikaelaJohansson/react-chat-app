@@ -21,8 +21,8 @@ function App() {
         <Route path="/offcanvas" element={<OffCanvas />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/newmessage" element={<NewMessage />} />
-        <Route path="/inviteUser" element={<InviteUser />} />
+        <Route path="/newMessage" element={<NewMessage />} />
+        <Route path="/InviteUser/:id" element={<InviteUser />} />
       </Routes>
     </Router>
   );
