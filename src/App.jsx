@@ -7,8 +7,6 @@ import Profile from './Komponents/Profile';
 import OffCanvas from './Komponents/OffCanvas';
 import NewMessage from './Komponents/NewMessage';
 import InviteUser from './Komponents/InviteUser';
-
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {

@@ -4,12 +4,15 @@ import axios from 'axios';
 
 const NewMessage = ({ onMessageSent }) => {
   const [message, setMessage] = useState('');
+  const [messageId, setMessageId] = useState('');
 
   const sendNewMessage = () => {
     const token = sessionStorage.getItem('token');
-    const conversationId = sessionStorage.getItem('id');
+    
+    const messageId = crypto.randomUUID();
+    setMessageId( messageId);
 
-    if (!conversationId) {
+    if (!messageId) {
       console.error('No conversationId provided.');
       return;
     }
@@ -18,10 +21,11 @@ const NewMessage = ({ onMessageSent }) => {
 
     const messagePayload = {
       text: sanitizedMessage,
-      conversationId: ''
+      conversationId:messageId 
     };
 
     console.log('Message being sent:', messagePayload);
+  
     console.log('Message being sent is sanitizedMessage');
 
     if (!token) {
@@ -44,6 +48,7 @@ const NewMessage = ({ onMessageSent }) => {
     });
 
     setMessage(''); // Clear the input field after sending the message
+    sessionStorage.setItem(messageId,messageId)
   };
 
   return (

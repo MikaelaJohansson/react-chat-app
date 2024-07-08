@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import imageCompression from 'browser-image-compression';
 import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import styles from '../CSS/Profile.module.css';
 
 const Profile = () => {
   const defaultAvatar = '/img/avatar.png';
@@ -10,8 +13,7 @@ const Profile = () => {
   const [preview, setPreview] = useState(null);
   const [editedEmail, setEditedEmail] = useState(sessionStorage.getItem('email') || '');
   const [editedUsername, setEditedUsername] = useState(sessionStorage.getItem('user') || '');
-
-  const UserId = sessionStorage.getItem('id');
+  const [validated, setValidated] = useState(false);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -38,43 +40,43 @@ const Profile = () => {
     }
   };
 
-  const handleApprove = async () => {
+  const handleApprove = async (event) => {
+    event.preventDefault();
     const token = sessionStorage.getItem('token');
-    
+    const UserId = sessionStorage.getItem('id');
 
-
-    console.log('Sending data:', {
-      userId: UserId,
-      updatedData: {
-        avatar: newAvatarFile,
-        email: editedEmail,
-        user: editedUsername,
-      },
-    });
-
-    const data = {
-      userId: UserId,
-      updatedData: {
-        avatar: newAvatarFile,
-        email: editedEmail,
-        user: editedUsername,
-      },
-    };
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
+      return;
+    }
 
     try {
-      const response = await axios.put('https://chatify-api.up.railway.app/user   ', data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+      const response = await axios.put(
+        'https://chatify-api.up.railway.app/user',
+        {
+          userId: UserId,
+          updatedData: {
+            avatar: newAvatarFile,
+            email: editedEmail,
+            user: editedUsername,
+          },
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       sessionStorage.setItem('email', editedEmail);
       sessionStorage.setItem('user', editedUsername);
       sessionStorage.setItem('avatar', newAvatarFile);
-
       console.log('User info updated successfully', response.data);
       window.location.href = '/Chat';
+
     } catch (error) {
       if (error.response) {
         console.error('Server responded with an error:', error.response.status, error.response.data);
@@ -91,7 +93,7 @@ const Profile = () => {
   const handleDelete = async () => {
     const token = sessionStorage.getItem('token');
     const userId = sessionStorage.getItem('id'); // Ensure userId is correctly fetched
-  
+
     try {
       const response = await axios.delete(`https://chatify-api.up.railway.app/users/${userId}`, {
         headers: {
@@ -102,6 +104,7 @@ const Profile = () => {
       alert('Your account has been successfully deleted.');
       sessionStorage.clear();
       window.location.href = '/Login';
+
     } catch (error) {
       if (error.response) {
         if (error.response.status === 400) {
@@ -111,6 +114,7 @@ const Profile = () => {
         } else {
           console.error('Server responded with an error:', error.response.status, error.response.data);
         }
+
       } else if (error.request) {
         console.error('No response received:', error.request);
       } else {
@@ -120,53 +124,69 @@ const Profile = () => {
       alert('Failed to delete account. Please try again later.');
     }
   };
-  
 
   return (
-    <div className="App">
-      <Link to="/Chat">tillbaka till chat</Link>
-      <h2>Update Your Profile</h2>
-      <div className="preview-container">
-        <img
-          src={preview || oldAvatar}
-          alt="Preview Avatar"
-          className="avatar-preview"
-          style={{ maxWidth: '100px', height: 'auto' }}
-        />
-      </div>
+    <div className={styles['profile-main']}>
+      <h1 className={styles['profile-h1']}>Här kan du uppdatera din profil</h1>
+      <div className={styles['profile-container']}>
+        <div>
+          <img
+            src={preview || oldAvatar}
+            alt="Preview Avatar"
+            className="avatar-preview"
+            style={{ maxWidth: '100px', height: 'auto' }}
+          />
+        </div>
 
-      <div className="upload-container">
-        <h3>Upload New Avatar</h3>
-        <input type="file" accept="image/*" onChange={handleFileChange} />
-      </div>
+        <div className={styles['upload-container']}>
+          <p>Ladda upp ny avatar</p>
+          <Form.Control
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            isInvalid={validated && !newAvatarFile}
+          />
+          <Form.Control.Feedback type="invalid">
+            Please choose an image file.
+          </Form.Control.Feedback>
+        </div>
 
-      <div className="email-container">
-        <h2>Edit Email</h2>
-        <input
-          type="email"
-          value={editedEmail}
-          onChange={(e) => setEditedEmail(e.target.value)}
-        />
-      </div>
+        <div  className={styles['email-container']}>
+          <p className={styles['profile-text']}>Redigera Email</p>
+          <Form.Control
+            type="email"
+            value={editedEmail}
+            onChange={(e) => setEditedEmail(e.target.value)}
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            Please provide a valid email address.
+          </Form.Control.Feedback>
+        </div>
 
-      <div className="username-container">
-        <h2>Edit Username</h2>
-        <input
-          type="text"
-          value={editedUsername}
-          onChange={(e) => setEditedUsername(e.target.value)}
-        />
+        <div className={styles['username-container']}>
+          <p className={styles['profile-text']}>Redigera användarnamn</p>
+          <Form.Control
+            type="text"
+            value={editedUsername}
+            onChange={(e) => setEditedUsername(e.target.value)}
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            Please provide a username.
+          </Form.Control.Feedback>
+        </div>
+        <Button variant="success" className={styles['profile-button']} onClick={handleApprove}>Uppdatera profil</Button>
+        <br />
+        <Button className={styles['profile-button-blue']} onClick={handleDelete}>Radera konto</Button>
       </div>
-      <br />
-
-      <button onClick={handleApprove}>Uppdatera profil</button>
-      <br />
-      <button onClick={handleDelete}>Radera konto</button>
-    </div>
+      <Link  className={styles['profile-link']} to="/Chat">Tillbaka till chat</Link>
+    </div>  
   );
 };
 
 export default Profile;
+
 
 
 

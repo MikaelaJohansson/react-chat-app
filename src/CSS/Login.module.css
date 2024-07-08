@@ -1,0 +1,52 @@
+/* Login.module.css */
+body{
+  justify-content: center; /* Centrerar horisontellt */
+  align-items: center; /* Centrerar vertikalt */
+  min-height: 100vh; /* För att fylla hela sidans höjd */
+  width: 100%;
+}
+.login-h1{
+  color: blue;
+  font-weight: bolder;
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+.login-text{
+  margin-right: 5rem;
+  position: relative;
+  top: -4rem;
+  text-align: center;
+  margin: 3rem;
+  padding: 2rem;
+  color: black;
+ 
+}
+.login-border{
+  border: 3px solid rgb(166, 165, 165);
+  padding: 5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #b3b1b1;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px  #ccc;
+  background-color: whitesmoke;
+  margin-right: 5rem;
+  font-size: 1.2rem;
+}
+.login-form {
+  white-space: nowrap;
+  font-size: 1.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: row; /* För att centrera innehållet vertikalt */
+  justify-content: center; /* Centrerar horisontellt */
+  align-items: center; /* Centrerar vertikalt */
+}
+.login-link{
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+
+
+
+

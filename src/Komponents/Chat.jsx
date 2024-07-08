@@ -4,30 +4,31 @@ import OffCanvas from './OffCanvas';
 import NewMessage from './NewMessage';
 
 
+
 const Chat = () => {
   const [user, setUser] = useState('');
   const [avatar, setAvatar] = useState('');
   const [invite, setInvite] = useState('');
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState('');
-  const [message, setMessage] = useState(''); 
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const userFromSessionStorage = sessionStorage.getItem('user');
     const avatarFromSessionStorage = sessionStorage.getItem('avatar');
-    const conversationIdFromSessionStorage = sessionStorage.getItem('id');
+    const messageId = sessionStorage.getItem('messageId');
 
     if (userFromSessionStorage && avatarFromSessionStorage) {
       setUser(userFromSessionStorage);
       setAvatar(avatarFromSessionStorage);
-      setConversationId(conversationIdFromSessionStorage);
+      setConversationId(messageId);
     }
 
-    fetchMessages(); // Call fetchMessages initially
+    fetchMessages(); // Anropa fetchMessages initialt
 
   }, []);
 
-  const fetchMessages = async () => {
+  const fetchMessages = async (messageId) => {
     const token = sessionStorage.getItem('token');
     if (!token) {
       console.error('No token found. User is not authenticated.');
@@ -40,14 +41,14 @@ const Chat = () => {
           Authorization: `Bearer ${token}`
         }
       });
-      setMessages(response.data); // Update messages state with fetched data
+      setMessages(response.data); // Uppdatera messages-tillståndet med hämtad data
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
   };
 
   const handleNewMessageSent = (newMessage) => {
-    setMessages(prevMessages => [...prevMessages, newMessage]); // Append new message to messages state
+    setMessages(prevMessages => [...prevMessages, newMessage]); // Lägg till det nya meddelandet till messages-tillståndet
   };
 
   useEffect(() => {
@@ -59,6 +60,13 @@ const Chat = () => {
 
 
 
+
+
+
+
+
+
+  
 
   //  hantera inbjudan i komponent
   const handleInvite = async () => {
@@ -84,7 +92,10 @@ const Chat = () => {
       });
 
       console.log('Inbjudan skickad framgångsrikt:', inviteResponse.data);
-      console.log(conversationId)
+      console.log('Before saving conversationId:', conversationId);
+      sessionStorage.setItem('conversationId', conversationId);
+      console.log('After saving conversationId:', sessionStorage.getItem('conversationId'));
+
       
       
     } catch (error) {
@@ -93,11 +104,41 @@ const Chat = () => {
     }
   };
 
-  const handleAcceptInvite = () => {
-    
-    window.location.href =(`/InviteUser/${conversationId}`);
+  const handleAcceptInvite = async (conversationId) => {
+    const token = sessionStorage.getItem('token');
+    const userId = sessionStorage.getItem('id'); // Antag att användar-ID lagras i session
+  
+    if (!token) {
+      console.error('Ingen token hittades. Användaren är inte autentiserad.');
+      return;
+    }
+  
+    try {
+      // Acceptera inbjudan genom att skicka en förfrågan till API:et
+      const response = await axios.post(  'https://chatify-api.up.railway.app/invite/accept',
+        { conversationId, userId }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        }
+      });
+  
+      console.log('Inbjudan accepterad framgångsrikt:', response.data);
+  
+      // Uppdatera aktuellt konversations-ID
+      setConversationId(conversationId);
+      fetchMessagesForConversation(conversationId); // Hämta meddelanden för den nya konversationen
+  
+      // Omdirigera till en ny komponent eller sida
+      window.location.href = '/InviteUser';
+    } catch (error) {
+      console.error('Fel vid accept av inbjudan:', error);
+    }
   };
+  
+  
 
+  
 
   return (
     <div className="sidenav">
@@ -120,7 +161,9 @@ const Chat = () => {
       />
       <button onClick={handleInvite}>Invite</button>
       </div>
-      <button onClick={handleAcceptInvite}>Acceptera inbjudan</button>
+      {conversationId && ( // Render the button only if conversationId exists
+        <button onClick={handleAcceptInvite}>Accept Invitation</button>
+      )}
     </div>
   );
 };

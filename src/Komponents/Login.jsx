@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
+import Form from 'react-bootstrap/Form';  // Lägg till
+  // Lägg till
+import Alert from 'react-bootstrap/Alert';  // Lägg till
+import styles from '../CSS/Login.module.css';
+import Button from 'react-bootstrap/Button';
+
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -26,7 +32,6 @@ const Login = () => {
   }, []);
 
   const handleLogin = async () => {
-   
     try {
       const response = await axios.post(
         'https://chatify-api.up.railway.app/auth/token',
@@ -38,7 +43,6 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-
         console.log('Login successful:', response.data);
         const token = response.data.token;
         const decoded = jwtDecode(token);
@@ -52,7 +56,6 @@ const Login = () => {
         console.log(decoded);
 
         navigate('/Chat');
-
       } else {
         throw new Error('Failed to log in');
       }
@@ -71,42 +74,51 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <header>
-        <h1>Snackis</h1>
-        <h2>Logga in på ditt konto</h2>
-      </header>
-      <section>
-        <label htmlFor="username">Användarnamn</label>
-        <input
-          type="text"
-          id="username"
-          placeholder="Användarnamn"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <br />
-        <label htmlFor="password">Lösenord</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Lösenord"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br />
-        <button type="submit" onClick={handleLogin} disabled={!csrfToken}>
-          Logga in
-        </button>
-        <br />
-        <Link to="/registration">Har du inget konto?</Link>
-        {error && <p>{error}</p>}
-      </section>
-    </div>
+    <section className={styles['login-form']}>
+      
+      <div  className={styles['login-text']}>
+        <h1 className={styles['login-h1']}>Snackis</h1>
+        Logga in på ditt konto Snackis konto. <br />
+        Snackis hjälper dig att hålla kontakten 
+        med vänner.
+      </div>
+      <Form className={styles['login-border']}>
+        <Form.Group className="mb-3" controlId="formUsername">
+          <Form.Label>Användarnamn</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Användarnamn"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formPassword">
+          <Form.Label>Lösenord</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Lösenord"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <br />
+          <Button variant="success" type="button" style={{fontSize: "1.3rem", left:'3rem', position:'relative'}} onClick={handleLogin}>
+            Logga in
+          </Button>
+          <br />
+           <Link className={styles['login-link']} to="/registration">Har du inget konto?</Link>
+           {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+        </Form.Group>
+      </Form>
+      <br />
+     
+    </section>
+    
+      
   );
 };
 
 export default Login;
+
 
 
 
