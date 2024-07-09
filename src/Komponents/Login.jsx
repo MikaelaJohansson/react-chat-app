@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';  // Lägg till
 import Alert from 'react-bootstrap/Alert';  // Lägg till
 import styles from '../CSS/Login.module.css';
 import Button from 'react-bootstrap/Button';
+import * as Sentry from "@sentry/react";
 
 
 const Login = () => {
@@ -20,9 +21,9 @@ const Login = () => {
     const fetchCsrfToken = async () => {
       try {
         const response = await axios.patch('https://chatify-api.up.railway.app/csrf');
-        console.log('Fetched CSRF Token:', response.data.csrfToken);
         setCsrfToken(response.data.csrfToken);
       } catch (error) {
+        Sentry.captureMessage('Error fetching CSRF token:', error);
         console.error('Error fetching CSRF token:', error);
         setError('Failed to fetch CSRF token. Please try again later.');
       }
@@ -43,6 +44,7 @@ const Login = () => {
       );
 
       if (response.status === 200) {
+        Sentry.captureMessage('Login successful wiiii:', response.data);
         console.log('Login successful:', response.data);
         const token = response.data.token;
         const decoded = jwtDecode(token);
@@ -57,25 +59,26 @@ const Login = () => {
 
         navigate('/Chat');
       } else {
+        Sentry.captureMessage('Failed to log in', 'error');
         throw new Error('Failed to log in');
       }
     } catch (error) {
-      console.error('Login error:', error);
       if (error.response) {
         if (error.response.status === 401) {
+          Sentry.captureMessage('Invalid credentials', 'error');
           setError('Invalid credentials.');
         } else {
+          Sentry.captureMessage('Login failed. Please try again later.', 'error');
           setError('Login failed. Please try again later.');
         }
-      } else {
-        setError('Network error. Please try again later.');
-      }
+      } 
     }
   };
 
   return (
+    
     <section className={styles['login-form']}>
-      
+      <button onClick={() => methodDoesNotExist()}>Break the world</button>
       <div  className={styles['login-text']}>
         <h1 className={styles['login-h1']}>Snackis</h1>
         Logga in på ditt konto Snackis konto. <br />
@@ -109,11 +112,8 @@ const Login = () => {
            {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
         </Form.Group>
       </Form>
-      <br />
-     
-    </section>
-    
-      
+      <br /> 
+    </section>  
   );
 };
 
