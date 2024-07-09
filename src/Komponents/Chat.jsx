@@ -3,8 +3,6 @@ import axios from 'axios';
 import OffCanvas from './OffCanvas';
 import NewMessage from './NewMessage';
 
-
-
 const Chat = () => {
   const [user, setUser] = useState('');
   const [avatar, setAvatar] = useState('');
@@ -28,7 +26,7 @@ const Chat = () => {
 
   }, []);
 
-  const fetchMessages = async (messageId) => {
+  const fetchMessages = async () => {
     const token = sessionStorage.getItem('token');
     if (!token) {
       console.error('No token found. User is not authenticated.');
@@ -48,25 +46,38 @@ const Chat = () => {
   };
 
   const handleNewMessageSent = (newMessage) => {
+    console.log('New message received in Chat component:', newMessage);
     setMessages(prevMessages => [...prevMessages, newMessage]); // Lägg till det nya meddelandet till messages-tillståndet
   };
 
   useEffect(() => {
     // Denna useEffect lyssnar på förändringar i meddelandetexten
     // och skulle kunna användas för att göra någonting varje gång meddelandet ändras
+    setMessages(prevMessages => [...prevMessages, NewMessage]);
     console.log('Message changed:', message);
     // Här kan du lägga till kod som ska köras varje gång meddelandetexten ändras
-  }, [message]);
+  }, [NewMessage]);
 
+  const deleteMessage = async (messageId) => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      console.error('No token found. User is not authenticated.');
+      return;
+    }
 
-
-
-
-
-
-
-
-  
+    try {
+      await axios.delete(`https://chatify-api.up.railway.app/messages/${messageId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      setMessages(prevMessages => prevMessages.filter(message => message.id !== messageId));
+      console.log('Message deleted successfully');
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  };
 
   //  hantera inbjudan i komponent
   const handleInvite = async () => {
@@ -137,9 +148,6 @@ const Chat = () => {
   };
   
   
-
-  
-
   return (
     <div className="sidenav">
       <h1>Hello {user}</h1>
@@ -149,6 +157,7 @@ const Chat = () => {
         {messages.map((message, index) => (
           <div key={index} className="message">
             <p>{message.text}</p>
+            <button onClick={() => deleteMessage(message.id)}>Delete</button>
           </div>
         ))}
       </div>
@@ -169,6 +178,8 @@ const Chat = () => {
 };
 
 export default Chat;
+
+
 
 
 

@@ -44,6 +44,8 @@ body{
 .login-link{
   font-size: 1.3rem;
   text-align: center;
+  position: relative;
+  top: 1rem;
 }
 
 

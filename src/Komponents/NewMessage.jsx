@@ -10,7 +10,7 @@ const NewMessage = ({ onMessageSent }) => {
     const token = sessionStorage.getItem('token');
     
     const messageId = crypto.randomUUID();
-    setMessageId( messageId);
+    setMessageId(messageId);
 
     if (!messageId) {
       console.error('No conversationId provided.');
@@ -21,12 +21,10 @@ const NewMessage = ({ onMessageSent }) => {
 
     const messagePayload = {
       text: sanitizedMessage,
-      conversationId:messageId 
+      conversationId: messageId 
     };
 
     console.log('Message being sent:', messagePayload);
-  
-    console.log('Message being sent is sanitizedMessage');
 
     if (!token) {
       console.error('No token found. User is not authenticated.');
@@ -35,7 +33,7 @@ const NewMessage = ({ onMessageSent }) => {
 
     axios.post('https://chatify-api.up.railway.app/messages', messagePayload, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`, // Correct syntax for injecting token
         'Content-Type': 'application/json'
       }
     })
@@ -47,8 +45,8 @@ const NewMessage = ({ onMessageSent }) => {
       console.error('Error sending message:', error);
     });
 
+    sessionStorage.setItem(messageId, messageId);
     setMessage(''); // Clear the input field after sending the message
-    sessionStorage.setItem(messageId,messageId)
   };
 
   return (
@@ -65,6 +63,7 @@ const NewMessage = ({ onMessageSent }) => {
 };
 
 export default NewMessage;
+
 
 
 
