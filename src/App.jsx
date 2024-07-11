@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Registration from './Komponents/Registration';
-import Login from './Komponents/Login';
-import Chat from './Komponents/Chat';
-import Profile from './Komponents/Profile';
-import OffCanvas from './Komponents/OffCanvas';
-import NewMessage from './Komponents/NewMessage';
-import InviteUser from './Komponents/InviteUser';
+import Registration from './components/Registration';
+import Login from './components/Login';
+import Chat from './components/Chat';
+import Profile from './components/Profile';
+import OffCanvas from './components/OffCanvas';
+import NewMessage from './components/NewMessage';
+import InviteUser from './components/InviteUser';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {

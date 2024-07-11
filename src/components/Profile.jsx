@@ -57,10 +57,11 @@ const Profile = () => {
         'https://chatify-api.up.railway.app/user',
         {
           userId: UserId,
+          
           updatedData: {
             avatar: newAvatarFile,
             email: editedEmail,
-            user: editedUsername,
+            username: editedUsername,
           },
         },
         {
