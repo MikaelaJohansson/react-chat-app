@@ -62,6 +62,7 @@ const Profile = () => {
             avatar: newAvatarFile,
             email: editedEmail,
             username: editedUsername,
+            
           },
         },
         {
