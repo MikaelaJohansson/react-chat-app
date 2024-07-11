@@ -53,18 +53,40 @@ const Profile = () => {
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete your account?')) {
-      try {
-        await axios.delete(`https://chatify-api.up.railway.app/users/${localStorage.getItem('userId')}`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        localStorage.clear();
-        navigate('/login');
-      } catch (error) {
-        console.error('Error deleting account:', error);
+    const token = sessionStorage.getItem('token');
+    const userId = sessionStorage.getItem('id'); // Ensure userId is correctly fetched
+
+
+    try {
+      const response = await axios.delete(`https://chatify-api.up.railway.app/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('User account deleted successfully', response.data);
+      alert('Your account has been successfully deleted.');
+      sessionStorage.clear();
+      window.location.href = '/Login';
+
+
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 400) {
+          console.error('Bad request - Invalid user ID');
+        } else if (error.response.status === 404) {
+          console.error('User not found');
+        } else {
+          console.error('Server responded with an error:', error.response.status, error.response.data);
+        }
+
+
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
       }
+      console.error('Error deleting user account', error);
+      alert('Failed to delete account. Please try again later.');
     }
   };
 

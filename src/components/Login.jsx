@@ -78,7 +78,6 @@ const Login = () => {
   return (
     
     <section className={styles['login-form']}>
-      <button onClick={() => methodDoesNotExist()}>Break the world</button>
       <div  className={styles['login-text']}>
         <h1 className={styles['login-h1']}>Snackis</h1>
         Logga in på ditt konto Snackis konto. <br />
