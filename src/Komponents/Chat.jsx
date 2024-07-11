@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import OffCanvas from './OffCanvas';
+import { Container, Row, Col, Button, ListGroup, Form } from 'react-bootstrap';
 import NewMessage from './NewMessage';
+
 
 const Chat = () => {
   const [user, setUser] = useState('');
@@ -9,7 +11,13 @@ const Chat = () => {
   const [invite, setInvite] = useState('');
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState('');
-  const [message, setMessage] = useState('');
+  const [messageText, setMessageText] = useState(''); // Bytte namn från 'message' till 'messageText'
+
+  const [conversations, setConversations] = useState({});
+  const [currentConversationId, setCurrentConversationId] = useState(null);
+  const [multiMessages, setMultiMessages] = useState([]);
+  const [inviteUserId, setInviteUserId] = useState('');
+  const [incomingInvitations, setIncomingInvitations] = useState([]);
 
   useEffect(() => {
     const userFromSessionStorage = sessionStorage.getItem('user');
@@ -54,7 +62,7 @@ const Chat = () => {
     // Denna useEffect lyssnar på förändringar i meddelandetexten
     // och skulle kunna användas för att göra någonting varje gång meddelandet ändras
     setMessages(prevMessages => [...prevMessages, NewMessage]);
-    console.log('Message changed:', message);
+    console.log('Message changed:', messageText);
     // Här kan du lägga till kod som ska köras varje gång meddelandetexten ändras
   }, [NewMessage]);
 
@@ -79,75 +87,94 @@ const Chat = () => {
     }
   };
 
-  //  hantera inbjudan i komponent
-  const handleInvite = async () => {
-    const token = sessionStorage.getItem('token');
-    const userId = invite;
-
-    if (!token) {
-      console.error('Ingen token hittades. Användaren är inte autentiserad.');
-      return;
+  useEffect(() => {
+    if (currentConversationId) {
+      fetchMultiMessages(currentConversationId);
     }
+  }, [currentConversationId]);
+
+  useEffect(() => {
+    fetchInvitations();
+  }, []);
+
+  const fetchMultiMessages = async (conversationId) => {
+    try {
+      const response = await axios.get(`https://chatify-api.up.railway.app/messages?conversationId=${conversationId}`);
+      setMultiMessages(response.data);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+  const startNewConversation = () => {
+    const newConversationId = crypto.randomUUID();
+    setConversations(prevConversations => ({
+      ...prevConversations,
+      [newConversationId]: []
+    }));
+    setCurrentConversationId(newConversationId);
+  };
+
+  const sendMessage = async (text) => {
+    if (!currentConversationId) return;
 
     try {
-      const conversationId = crypto.randomUUID();
-      setConversationId(conversationId);
+      const response = await axios.post(`https://chatify-api.up.railway.app/messages`, {
+        conversationId: currentConversationId,
+        text
+      });
+      setMultiMessages(prevMessages => [...prevMessages, response.data]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
 
-      const inviteResponse = await axios.post(`https://chatify-api.up.railway.app/invite/${userId}`, {
-        conversationId: conversationId
+  const inviteUserToConversation = async () => {
+    if (!currentConversationId || !inviteUserId) return;
+  
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      console.error('No token found. User is not authenticated.');
+      return;
+    }
+  
+    try {
+      await axios.post(`https://chatify-api.up.railway.app/invite/${inviteUserId}`, {
+        conversationId: currentConversationId
       }, {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      console.log('Inbjudan skickad framgångsrikt:', inviteResponse.data);
-      console.log('Before saving conversationId:', conversationId);
-      sessionStorage.setItem('conversationId', conversationId);
-      console.log('After saving conversationId:', sessionStorage.getItem('conversationId'));
-
-      
-      
-    } catch (error) {
-      console.error('Fel vid inbjudan av användare:', error);
-      setError('Användaren hittades inte. Kontrollera användar-ID.');
-    }
-  };
-
-  const handleAcceptInvite = async (conversationId) => {
-    const token = sessionStorage.getItem('token');
-    const userId = sessionStorage.getItem('id'); // Antag att användar-ID lagras i session
-  
-    if (!token) {
-      console.error('Ingen token hittades. Användaren är inte autentiserad.');
-      return;
-    }
-  
-    try {
-      // Acceptera inbjudan genom att skicka en förfrågan till API:et
-      const response = await axios.post(  'https://chatify-api.up.railway.app/invite/accept',
-        { conversationId, userId }, {
-        headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
-  
-      console.log('Inbjudan accepterad framgångsrikt:', response.data);
-  
-      // Uppdatera aktuellt konversations-ID
-      setConversationId(conversationId);
-      fetchMessagesForConversation(conversationId); // Hämta meddelanden för den nya konversationen
-  
-      // Omdirigera till en ny komponent eller sida
-      window.location.href = '/InviteUser';
+      alert(`User ${inviteUserId} invited to conversation ${currentConversationId}`);
     } catch (error) {
-      console.error('Fel vid accept av inbjudan:', error);
+      console.error('Error inviting user:', error);
+      if (error.response && error.response.status === 401) {
+        // Handle unauthorized errors (e.g., redirect to login page or show error message)
+      }
     }
   };
   
-  
+
+  const fetchInvitations = async () => {
+    try {
+      const response = await axios.get('https://chatify-api.up.railway.app/invites');
+      setIncomingInvitations(response.data);
+    } catch (error) {
+      console.error('Error fetching invitations:', error);
+    }
+  };
+
+  const acceptInvitation = async (invitationId) => {
+    try {
+      await axios.post(`https://chatify-api.up.railway.app/invites/${invitationId}/accept`);
+      fetchInvitations();
+    } catch (error) {
+      console.error('Error accepting invitation:', error);
+    }
+  };
+
   return (
     <div className="sidenav">
       <h1>Hello {user}</h1>
@@ -161,23 +188,73 @@ const Chat = () => {
           </div>
         ))}
       </div>
-      <div className='invite'>
-      <input 
-        type="text" 
-        value={invite} 
-        onChange={(e) => setInvite(e.target.value)} 
-        placeholder="invite" 
-      />
-      <button onClick={handleInvite}>Invite</button>
-      </div>
-      {conversationId && ( // Render the button only if conversationId exists
-        <button onClick={handleAcceptInvite}>Accept Invitation</button>
-      )}
+
+      <Container fluid>
+        <Row>
+          <Col md={3} className="sidebar">
+            <Button onClick={startNewConversation} className="mb-3">Start New Conversation</Button>
+            <ListGroup>
+              {Object.keys(conversations).map(conversationId => (
+                <ListGroup.Item 
+                  key={conversationId} 
+                  action 
+                  onClick={() => setCurrentConversationId(conversationId)}
+                  active={currentConversationId === conversationId}
+                >
+                  Conversation {conversationId}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+            <Form.Control 
+              type="text" 
+              placeholder="Invite user ID" 
+              value={inviteUserId} 
+              onChange={(e) => setInviteUserId(e.target.value)} 
+              className="mt-3"
+            />
+            <Button onClick={inviteUserToConversation} className="mt-2">Invite User</Button>
+            <h3 className="mt-4">Incoming Invitations</h3>
+            <ListGroup>
+              {incomingInvitations.map(invitation => (
+                <ListGroup.Item key={invitation.id}>
+                  <span>Conversation {invitation.conversationId}</span>
+                  <Button onClick={() => acceptInvitation(invitation.id)} className="ml-2">Accept</Button>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Col>
+          <Col md={9} className="chat-window">
+            {currentConversationId ? (
+              <>
+                <h2>Conversation {currentConversationId}</h2>
+                <ListGroup>
+                  {multiMessages.map(message => (
+                    <ListGroup.Item key={message.id}>{message.text}</ListGroup.Item>
+                  ))}
+                </ListGroup>
+                <Form.Control
+                  type="text"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      sendMessage(e.target.value);
+                      e.target.value = '';
+                    }
+                  }}
+                  className="mt-3"
+                />
+              </>
+            ) : (
+              <p>Select a conversation to view messages</p>
+            )}
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };
 
 export default Chat;
+
 
 
 

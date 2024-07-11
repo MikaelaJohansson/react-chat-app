@@ -4,10 +4,9 @@ import axios from 'axios';
 import styles from '../CSS/Registration.module.css';
 import Button from 'react-bootstrap/Button';
 import * as Sentry from "@sentry/react";
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
+
 
 const Registration = () => {
   const [username, setUsername] = useState('');
