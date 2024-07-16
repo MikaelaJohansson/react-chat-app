@@ -26,7 +26,7 @@ const OffCanvas = ({ user, avatar }) => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <h1 style={{position:'relative', fontSize:'3rem', paddingLeft:'3rem', marginBottom:'1rem'}}>{user}</h1>
-            <img src={avatar} alt="Avatar" style={{borderRadius:'0.5rem',boxShadow: '10px 10px 10px gray', border:'1px solid Gray' }} />
+            <img src={avatar} alt="Avatar" style={{borderRadius:'0.5rem', width:250, justifyContent:'center', boxShadow: '10px 10px 10px gray', border:'1px solid Gray' }} />
             <br />
             <Button variant="primary" type="button" style={{margin:"1rem", position:'relative', marginLeft:'3rem', fontSize:'1rem'}} onClick={handleLogout} >
               Logga ut
