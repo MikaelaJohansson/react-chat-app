@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Container, Form, Button, Col, Row, Image } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Profile = () => {
   const [username, setUsername] = useState('');
@@ -109,7 +111,7 @@ const Profile = () => {
         },
       });
       alert('Your account has been successfully deleted.');
-      sessionStorage.delete(sentryReplaySession)
+      sessionStorage.delete(sentryReplaySession);
       sessionStorage.clear();
       window.location.href = '/Login';
     } catch (error) {
@@ -119,58 +121,65 @@ const Profile = () => {
   };
 
   return (
-    <div>
-      <h2>Profile</h2>
-      <div>
-        <label>
-          Username:
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Email:
-          <input 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Avatar:
-          <input 
-            type="file" 
-            onChange={handleFileChange} 
-          />
-        </label>
-      </div>
-      {avatarPreview && (
-        <div>
-          <h3>Avatar Preview:</h3>
-          <img 
-            src={avatarPreview} 
-            alt="Avatar Preview" 
-            style={{ width: '100px', height: '100px' }} 
-          />
-        </div>
-      )}
-      <div>
-        <button onClick={handleUpdate}>Update Profile</button>
-        <button onClick={handleDelete}>Delete Account</button>
-      </div>
-      <Link to="/Chat">Tillbaka till chat</Link>
+    <Container style={{border:'2px solid #b3b1b1)', borderRadius:'1rem', padding:'2rem', textAlign:'center', backgroundColor:'whitesmoke', boxShadow:'5px 5px 5px  #ccc'}}>
+      <h2 className="my-4">Uppdatera din Profile</h2>
+      <Form>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm="2">User</Form.Label>
+          <Col sm="10">
+            <Form.Control 
+              type="text" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm="2">Email</Form.Label>
+          <Col sm="10">
+            <Form.Control 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm="2">Avatar</Form.Label>
+          <Col sm="10">
+            <Form.Control 
+              type="file" 
+              onChange={handleFileChange} 
+            />
+          </Col>
+        </Form.Group>
+        {avatarPreview && (
+          <Form.Group as={Row} className="mb-3">
+            <Col sm={{ span: 10, offset: 2 }}>
+              <Image 
+                src={avatarPreview} 
+                alt="Avatar Preview" 
+                rounded 
+                style={{ width: '100px', height: '100px' }} 
+              />
+            </Col>
+          </Form.Group>
+        )}
+        <Form.Group as={Row} className="mb-3">
+          <Col sm={{ span: 10, offset: 2 }}>
+            <Button variant="primary" onClick={handleUpdate} className="me-2">Uppdatera profil</Button>
+            <Button variant="danger" onClick={handleDelete}>Radera konto</Button>
+          </Col>
+        </Form.Group>
+      </Form>
+      <Link to="/Chat">Tillbaka till Chat</Link>
       <ToastContainer />
-    </div>
+    </Container>
   );
 };
 
 export default Profile;
+
 
 
 

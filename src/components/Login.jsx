@@ -80,7 +80,7 @@ const Login = () => {
     <section className={styles['login-form']}>
       <div  className={styles['login-text']}>
         <h1 className={styles['login-h1']}>Snackis</h1>
-        Logga in på ditt konto Snackis konto. <br />
+        Logga in på ditt Snackis konto. <br />
         Snackis hjälper dig att hålla kontakten 
         med vänner.
       </div>

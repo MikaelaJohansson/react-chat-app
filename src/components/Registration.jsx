@@ -24,7 +24,7 @@ const Registration = () => {
       })
       .catch(error => {
         Sentry.captureException(error);
-        console.error('Fel vid hämtning av CSRF-token:', error);
+        console.error(`[${new Date().toISOString()}] Fel vid hämtning av CSRF-token: User ${user}`, error);
       });
   }, []);
 

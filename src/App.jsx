@@ -8,6 +8,7 @@ import OffCanvas from './components/OffCanvas';
 import NewMessage from './components/NewMessage';
 import InviteUser from './components/InviteUser';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import FriendChat from './components/FriendChat';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/newMessage" element={<NewMessage />} />
         <Route path="/InviteUser/:id" element={<InviteUser />} />
+        <Route path="/friendChat" element={<FriendChat />} />
       </Routes>
     </Router>
   );
