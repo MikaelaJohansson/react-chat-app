@@ -13,32 +13,12 @@ const Profile = () => {
   const [avatarPreview, setAvatarPreview] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const response = await axios.get('https://chatify-api.up.railway.app/user', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        const user = response.data;
-        setUsername(user.username);
-        setEmail(user.email);
-        setAvatar(user.avatar);
-        setAvatarPreview(user.avatar);
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
-    };
-    fetchUserDetails();
-  }, []);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
     const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
-
     const formData = new FormData();
     formData.append('key', apiKey);
     formData.append('image', file);
@@ -86,13 +66,14 @@ const Profile = () => {
         },
       });
 
-      sessionStorage.setItem('avatar');
-      sessionStorage.setItem('email');
-      sessionStorage.setItem('user');
+      sessionStorage.setItem('avatar', avatar);
+      sessionStorage.setItem('email', email);
+      sessionStorage.setItem('username', username);
       alert('Profile updated successfully');
       navigate('/Chat');
     } catch (error) {
       console.error('Error updating profile:', error);
+      toast.error('Error updating profile.');
       if (error.response) {
         console.error('Response data:', error.response.data);
         console.error('Response status:', error.response.status);
@@ -111,18 +92,17 @@ const Profile = () => {
         },
       });
       alert('Your account has been successfully deleted.');
-      sessionStorage.delete(sentryReplaySession);
       sessionStorage.clear();
       window.location.href = '/Login';
     } catch (error) {
       console.error('Error deleting user account', error);
-      alert('Failed to delete account. Please try again later.');
+      toast.error('Failed to delete account. Please try again later.');
     }
   };
 
   return (
-    <Container style={{border:'2px solid #b3b1b1)', borderRadius:'1rem', padding:'2rem', textAlign:'center', backgroundColor:'whitesmoke', boxShadow:'5px 5px 5px  #ccc'}}>
-      <h2 className="my-4">Uppdatera din Profile</h2>
+    <Container style={{ border: '2px solid #b3b1b1', borderRadius: '1rem', padding: '2rem', textAlign: 'center', backgroundColor: 'whitesmoke', boxShadow: '5px 5px 5px #ccc' }}>
+      <h2 className="my-4">Uppdatera din Profil</h2>
       <Form>
         <Form.Group as={Row} className="mb-3">
           <Form.Label column sm="2">User</Form.Label>
@@ -179,6 +159,7 @@ const Profile = () => {
 };
 
 export default Profile;
+
 
 
 
