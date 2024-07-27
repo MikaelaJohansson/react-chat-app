@@ -44,9 +44,7 @@ const Chat = ({ authToken, currentUserId }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        params: {
-          userId: id // Assuming you have a way to filter messages for the logged-in user
-        }
+        
        
       });
       setMessages(response.data);
