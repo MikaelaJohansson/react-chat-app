@@ -5,7 +5,9 @@ import FriendChat from './FriendChat';
 import NewMessage from './NewMessage';
 import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from 'react-router-dom';
-
+import { Container, Row, Col, Button, Form } from 'react-bootstrap';
+import { FaTimes } from 'react-icons/fa';
+import styles from '../CSS/Chat.module.css';
 
 const Chat = ({ authToken, currentUserId }) => {
   const [user, setUser] = useState('');
@@ -13,16 +15,15 @@ const Chat = ({ authToken, currentUserId }) => {
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState('');
   const [conversations, setConversations] = useState({});
-  const [userId, setUserId] = useState(''); 
+  const [userId, setUserId] = useState('');
   const [inviteList, setInviteList] = useState([]);
-  const [receivedInvites, setReceivedInvites] = useState([]); // Updated from inviteList
-
+  const [receivedInvites, setReceivedInvites] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [selectedInvite, setSelectedInvite] = useState(null);
-  const [selectedInvitation, setSelectedInvitation] = useState(null); // Updated from selectedInvite
+  const [selectedInvitation, setSelectedInvitation] = useState(null);
 
   const navigate = useNavigate();
- 
+
   useEffect(() => {
     const userFromSessionStorage = sessionStorage.getItem('user');
     const avatarFromSessionStorage = sessionStorage.getItem('avatar');
@@ -35,7 +36,7 @@ const Chat = ({ authToken, currentUserId }) => {
     }
     fetchMessages();
     loadInvitationsFromLocalStorage();
-  }, [messages,conversations]);
+  }, [messages, conversations]);
 
   const fetchMessages = async () => {
     const token = sessionStorage.getItem('token');
@@ -47,8 +48,6 @@ const Chat = ({ authToken, currentUserId }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        
-       
       });
       setMessages(response.data);
     } catch (error) {
@@ -77,33 +76,21 @@ const Chat = ({ authToken, currentUserId }) => {
     }
   };
 
-
-
-
-
-
-
   const handleInvite = async () => {
     if (userId.trim()) {
       const cryptoId = crypto.randomUUID();
-      
+      const token = sessionStorage.getItem('token');
 
-      const token = sessionStorage.getItem('token'); // Ensure token is available
-     
       try {
         const response = await axios.post(`https://chatify-api.up.railway.app/invite/${userId}`, {
           conversationId: cryptoId,
-          username: user // Add sender's username
+          username: user
         }, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
           }
         });
-
-        console.log('Invitation sent successfully:', response.data);
-        console.log(cryptoId,userId);
-        
 
         const newInvite = { username: userId, conversationId: cryptoId };
         localStorage.setItem(`invite-${cryptoId}`, JSON.stringify(newInvite));
@@ -115,9 +102,6 @@ const Chat = ({ authToken, currentUserId }) => {
         ]);
 
         setUserId('');
-
-        console.log('Invitation sent successfully:', response.data);
-        
       } catch (error) {
         console.error('Error sending invitation:', error);
       }
@@ -135,32 +119,24 @@ const Chat = ({ authToken, currentUserId }) => {
     setInviteList(invites);
   };
 
-
   const retrieveInvitations = () => {
     const jwtToken = sessionStorage.getItem('token');
-  
+
     if (!jwtToken) {
       console.error('No token found in session storage.');
       return;
     }
-  
+
     try {
       const decodedToken = jwtDecode(jwtToken);
-      console.log('Decoded Token:', decodedToken);
-  
       const inviteString = decodedToken.invite || "[]";
       const invites = JSON.parse(inviteString);
-      console.log('Parsed Invites:', invites);
-  
       setReceivedInvites(Array.isArray(invites) ? invites : []);
     } catch (error) {
       console.error('Error decoding JWT or parsing invites:', error);
     }
   };
-  
-   
 
-  // Function to handle invite selection
   const handleInviteSelect = (invite) => {
     setSelectedInvite(invite);
     navigate('/FriendChat', { state: { invite } });
@@ -169,100 +145,95 @@ const Chat = ({ authToken, currentUserId }) => {
   const handleInvitationSelect = (invite) => {
     setSelectedInvitation(invite);
     localStorage.setItem('selectedInvitation', JSON.stringify(invite));
-    navigate('/FriendChat', { state: { invite} });
+    navigate('/FriendChat', { state: { invite } });
   };
 
-  
   return (
-    <div className="sidenav">
+    <Container className={styles.cont}>
+      <Row>
+        <Col md={4}>
+          <h1>Hej {user} Välkommen tillbaka</h1>
+          <OffCanvas user={user} avatar={avatar} />
+          <NewMessage onMessageSent={handleNewMessageSent} />
 
-      <h1>Hello {user}</h1>
-      <OffCanvas user={user} avatar={avatar} />
-      <NewMessage onMessageSent={handleNewMessageSent} />
-
-      <div className="messages">
-        {messages.map((message) => (
-          <div key={message.id} className="message">
-            <p>{message.text}</p>
-            <button onClick={() => deleteMessage(message.id)}>Delete</button>
+          <div className="messages">
+            {messages.map((message) => (
+              <div key={message.id} className="message">
+                <p>{message.text}</p>
+                <Button variant="link" onClick={() => deleteMessage(message.id)}>
+                  <FaTimes />
+                </Button>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </Col>
 
-      <div>
-        <input
-          type="text"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          placeholder="Enter user ID"
-        />
-        <button onClick={handleInvite}>Bjud in vän</button>
-      </div>
+        <Col md={8}>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="text"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              placeholder="Ange användar ID"
+            />
+            <Button onClick={handleInvite}>Bjud in vän</Button>
+          </Form.Group>
 
+          <div>
+            <h2>Dina inbjudningar</h2>
+            <ul>
+              {Array.isArray(inviteList) && inviteList.length > 0 ? (
+                inviteList.map((invite, index) => (
+                  <li key={index}>
+                    <Button variant="link" onClick={() => handleInviteSelect(invite)}>
+                      {invite.username || invite.conversationId}
+                    </Button>
+                  </li>
+                ))
+              ) : (
+                <p>Inga inbjudningar tillgängliga</p>
+              )}
+            </ul>
+          </div>
 
-
-
-
-      <div>
-        <h2>Your Invitations</h2>
-        <ul>
-          {Array.isArray(inviteList) && inviteList.length > 0 ? (
-            inviteList.map((invite, index) => (
-              <li key={index}>
-                <button onClick={() => handleInviteSelect(invite)}>
-                  {invite.username || invite.conversationId}
-                </button>
-              </li>
-            ))
-          ) : (
-            <p>No invites available</p>
+          {selectedInvite && (
+            <div>
+              <h2>Skicka ett medelande till {selectedInvite.username || selectedInvite.conversationId}</h2>
+              <Form.Control
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Skriv medelande..."
+              />
+              <Button onClick={sendMessageToInvite}>Skicka</Button>
+            </div>
           )}
-        </ul>
-      </div>
 
-      {selectedInvite && (
-        <div>
-          <h2>Send a message to {selectedInvite.username || selectedInvite.conversationId}</h2>
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Write a message..."
-          />
-          <button onClick={sendMessageToInvite}>Send</button>
-        </div>
-      )}
-
-
-
-
-    <div>
-      <button onClick={retrieveInvitations}>Retrieve Invitations</button>
-      <ul>
-        {Array.isArray(receivedInvites) && receivedInvites.length > 0 ? (
-          receivedInvites.map((invitation, idx) => (
-            <li key={idx}>
-              <button onClick={() => handleInvitationSelect(invitation)}>
-                {invitation.username || invitation.convoId}
-              </button>
-            </li>
-          ))
-        ) : (
-          <p>No invitations available</p>
-        )}
-      </ul>
-    </div>
-
-
-
-
-
-     
-    </div>
+          <div>
+            <Button onClick={retrieveInvitations}>Hämta inbjudan från vänner</Button>
+            <ul>
+              {Array.isArray(receivedInvites) && receivedInvites.length > 0 ? (
+                receivedInvites.map((invitation, idx) => (
+                  <li key={idx}>
+                    <Button variant="link" onClick={() => handleInvitationSelect(invitation)}>
+                      {invitation.username || invitation.convoId}
+                    </Button>
+                  </li>
+                ))
+              ) : (
+                <p>Inga inbjudningar tillgängliga</p>
+              )}
+            </ul>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
 export default Chat;
+
+
 
 
 

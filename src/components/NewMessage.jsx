@@ -55,9 +55,9 @@ const NewMessage = ({ onMessageSent }) => {
         type="text" 
         value={message} 
         onChange={(e) => setMessage(e.target.value)} 
-        placeholder="Enter your message" 
+        placeholder="Skriv medelande" 
       />
-      <button onClick={sendNewMessage}>Send</button>
+      <button onClick={sendNewMessage}>Skicka</button>
     </div>
   );
 };

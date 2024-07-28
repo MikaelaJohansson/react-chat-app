@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Importera axios
 import DOMPurify from 'dompurify';
+import { FaTimes } from 'react-icons/fa';
+import { Container, Row, Col, Button, Form, ListGroup } from 'react-bootstrap';
 
 const FriendChat = () => {
   const location = useLocation();
@@ -54,9 +56,11 @@ const FriendChat = () => {
         return;
       }
 
+      const sanitizedMessage = DOMPurify.sanitize(newMessage); // Sanera input
+
       const response = await axios.post('https://chatify-api.up.railway.app/messages', 
       {
-        text: newMessage,
+        text: sanitizedMessage,
         conversationId: invite.conversationId
       }, {
         headers: {
@@ -111,39 +115,51 @@ const FriendChat = () => {
   };
 
   return (
-    <div>
+    <Container>
       {invite ? (
         <div>
           <h1>Chat with {invite.username || invite.conversationId}</h1>
-          <ul>
+          <ListGroup>
             {chatMessages.length > 0 ? (
               chatMessages.map((msg) => (
-                <li key={msg.id}>
-                  {msg.text} <small>{formatDate(msg.createdAt)}</small>
-                  <button onClick={() => deleteChatItem(msg.id)}>Delete</button>
-                </li>
+                <ListGroup.Item key={msg.id}>
+                  <Row>
+                    <Col xs={10}>
+                      {msg.text} <small>{formatDate(msg.createdAt)}</small>
+                    </Col>
+                    <Col xs={2} className="text-end">
+                      <Button variant="danger" size="sm" onClick={() => deleteChatItem(msg.id)}>
+                        <FaTimes />
+                      </Button>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
               ))
             ) : (
               <p>No messages found</p>
             )}
-          </ul>
-          <div>
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Write a message..."
-            />
-            <button onClick={sendMessage}>Send</button>
-          </div>
+          </ListGroup>
+          <Form className="mt-3">
+            <Form.Group controlId="messageInput">
+              <Form.Control
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Write a message..."
+              />
+            </Form.Group>
+            <Button className="mt-2" onClick={sendMessage}>Send</Button>
+          </Form>
         </div>
       ) : (
         <p>No invite selected</p>
       )}
       <Link to="/Chat">Back to Chat</Link>
-    </div>
+    </Container>
   );
 }
 
 export default FriendChat;
+
+
 
