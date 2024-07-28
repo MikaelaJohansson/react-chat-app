@@ -5,7 +5,7 @@ import FriendChat from './FriendChat';
 import NewMessage from './NewMessage';
 import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from 'react-router-dom';
-import DOMPurify from 'dompurify';
+
 
 const Chat = ({ authToken, currentUserId }) => {
   const [user, setUser] = useState('');
@@ -14,9 +14,13 @@ const Chat = ({ authToken, currentUserId }) => {
   const [conversationId, setConversationId] = useState('');
   const [conversations, setConversations] = useState({});
   const [userId, setUserId] = useState(''); 
- 
   const [inviteList, setInviteList] = useState([]);
-  
+  const [receivedInvites, setReceivedInvites] = useState([]); // Updated from inviteList
+
+  const [newMessage, setNewMessage] = useState('');
+  const [selectedInvite, setSelectedInvite] = useState(null);
+  const [selectedInvitation, setSelectedInvitation] = useState(null); // Updated from selectedInvite
+
   const navigate = useNavigate();
  
   useEffect(() => {
@@ -30,13 +34,12 @@ const Chat = ({ authToken, currentUserId }) => {
       setConversationId(messageId);
     }
     fetchMessages();
+    loadInvitationsFromLocalStorage();
   }, [messages,conversations]);
 
   const fetchMessages = async () => {
     const token = sessionStorage.getItem('token');
     if (!token) return;
-
-    const id=sessionStorage.getItem('user')
 
     try {
       const response = await axios.get('https://chatify-api.up.railway.app/messages', {
@@ -74,6 +77,12 @@ const Chat = ({ authToken, currentUserId }) => {
     }
   };
 
+
+
+
+
+
+
   const handleInvite = async () => {
     if (userId.trim()) {
       const cryptoId = crypto.randomUUID();
@@ -83,15 +92,30 @@ const Chat = ({ authToken, currentUserId }) => {
      
       try {
         const response = await axios.post(`https://chatify-api.up.railway.app/invite/${userId}`, {
-          conversationId: cryptoId
+          conversationId: cryptoId,
+          username: user // Add sender's username
         }, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
           }
         });
+
         console.log('Invitation sent successfully:', response.data);
         console.log(cryptoId,userId);
+        
+
+        const newInvite = { username: userId, conversationId: cryptoId };
+        localStorage.setItem(`invite-${cryptoId}`, JSON.stringify(newInvite));
+
+        setInviteList(prevList => [
+          ...prevList,
+          newInvite,
+          { username: user, conversationId: cryptoId }
+        ]);
+
+        console.log('Invitation sent successfully:', response.data);
+        
       } catch (error) {
         console.error('Error sending invitation:', error);
       }
@@ -100,66 +124,56 @@ const Chat = ({ authToken, currentUserId }) => {
     }
   };
 
+  const loadInvitationsFromLocalStorage = () => {
+    const keys = Object.keys(localStorage);
+    const invites = keys
+      .filter(key => key.startsWith('invite-'))
+      .map(key => JSON.parse(localStorage.getItem(key)));
 
-  
-    
+    setInviteList(invites);
+  };
 
 
-
-
-
-  
-  const fetchInvitations = () => {
+  const retrieveInvitations = () => {
     const jwtToken = sessionStorage.getItem('token');
-
+  
     if (!jwtToken) {
       console.error('No token found in session storage.');
       return;
     }
-
+  
     try {
       const decodedToken = jwtDecode(jwtToken);
       console.log('Decoded Token:', decodedToken);
-
+  
       const inviteString = decodedToken.invite || "[]";
       const invites = JSON.parse(inviteString);
       console.log('Parsed Invites:', invites);
-
-      setInviteList(Array.isArray(invites) ? invites : []);
+  
+      setReceivedInvites(Array.isArray(invites) ? invites : []);
     } catch (error) {
       console.error('Error decoding JWT or parsing invites:', error);
     }
   };
+  
    
 
   // Function to handle invite selection
   const handleInviteSelect = (invite) => {
-    
+    setSelectedInvite(invite);
     navigate('/FriendChat', { state: { invite } });
   };
 
-  // // Function to start a conversation
-  // const startConversation = async (cryptoId) => {
-  //   const token = sessionStorage.getItem('token');
-  //   try {
-  //     const response = await axios.post('https://chatify-api.up.railway.app/messages', {
-  //       text: 'Starting a conversation',
-  //       conversationId: cryptoId,
-  //     }, {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     console.log('Conversation started:', response.data);
-  //   } catch (error) {
-  //     console.error('Error starting conversation:', error);
-  //   }
-  // };
-  
+  const handleInvitationSelect = (invite) => {
+    setSelectedInvitation(invite);
+    localStorage.setItem('selectedInvitation', JSON.stringify(invite));
+    navigate('/FriendChat', { state: { invite} });
+  };
+
   
   return (
     <div className="sidenav">
+
       <h1>Hello {user}</h1>
       <OffCanvas user={user} avatar={avatar} />
       <NewMessage onMessageSent={handleNewMessageSent} />
@@ -172,7 +186,8 @@ const Chat = ({ authToken, currentUserId }) => {
           </div>
         ))}
       </div>
-        <div>
+
+      <div>
         <input
           type="text"
           value={userId}
@@ -187,7 +202,7 @@ const Chat = ({ authToken, currentUserId }) => {
 
 
       <div>
-        <button onClick={fetchInvitations}>Fetch Invites</button>
+        <h2>Your Invitations</h2>
         <ul>
           {Array.isArray(inviteList) && inviteList.length > 0 ? (
             inviteList.map((invite, index) => (
@@ -201,7 +216,45 @@ const Chat = ({ authToken, currentUserId }) => {
             <p>No invites available</p>
           )}
         </ul>
-     </div>
+      </div>
+
+      {selectedInvite && (
+        <div>
+          <h2>Send a message to {selectedInvite.username || selectedInvite.conversationId}</h2>
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Write a message..."
+          />
+          <button onClick={sendMessageToInvite}>Send</button>
+        </div>
+      )}
+
+
+
+
+    <div>
+      <button onClick={retrieveInvitations}>Retrieve Invitations</button>
+      <ul>
+        {Array.isArray(receivedInvites) && receivedInvites.length > 0 ? (
+          receivedInvites.map((invitation, idx) => (
+            <li key={idx}>
+              <button onClick={() => handleInvitationSelect(invitation)}>
+                {invitation.username || invitation.convoId}
+              </button>
+            </li>
+          ))
+        ) : (
+          <p>No invitations available</p>
+        )}
+      </ul>
+    </div>
+
+
+
+
+
      
     </div>
   );

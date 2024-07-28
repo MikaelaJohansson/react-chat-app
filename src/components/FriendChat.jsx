@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Importera axios
+import DOMPurify from 'dompurify';
 
 const FriendChat = () => {
   const location = useLocation();
