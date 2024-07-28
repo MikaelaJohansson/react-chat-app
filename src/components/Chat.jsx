@@ -114,6 +114,8 @@ const Chat = ({ authToken, currentUserId }) => {
           { username: user, conversationId: cryptoId }
         ]);
 
+        setUserId('');
+
         console.log('Invitation sent successfully:', response.data);
         
       } catch (error) {
