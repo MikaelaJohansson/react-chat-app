@@ -25,7 +25,7 @@ const Chat = ({ authToken, currentUserId }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = sessionStorage.getItem('user');
+    const user = sessionStorage.getItem('username');
     const avatar = sessionStorage.getItem('avatar');
     const messageId = sessionStorage.getItem('messageId');
 
@@ -220,7 +220,7 @@ const Chat = ({ authToken, currentUserId }) => {
           )}
 
           <div className={styles.invites}>
-            <h2>Hämta inbjudan från väner</h2>
+            <h2>Hämta inbjudan från</h2>
             <Button onClick={retrieveInvitations}>Hämta</Button>
             <ul>
               {Array.isArray(receivedInvites) && receivedInvites.length > 0 ? (

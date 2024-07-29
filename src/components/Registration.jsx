@@ -40,9 +40,10 @@ const Registration = () => {
           csrfToken
         }
       );
-
+  
       if (response.status === 201) {
         console.log('Användare registrerad framgångsrikt:', response.data);
+        alert("Användare registrerad framgångsrikt:', response.data")
         navigate('/login');
         setUsername('');
         setPassword('');
@@ -57,21 +58,27 @@ const Registration = () => {
       if (error.response) {
         if (error.response.status === 400) {
           const errorMessage = error.response.data.error;
-          if( 
-            errorMessage.includes('Användarnamn') || 
-            errorMessage.includes('Lösenord') || 
-            errorMessage.includes('E-postadress')
-          ){
-            Sentry.captureMessage('Vänligen fyll i alla obligatoriska fält.');
+          if (errorMessage.includes('Username or email already exists')) {
+            setError('Användarnamn eller e-post finns redan.');
+            Sentry.captureMessage('Användarnamn eller e-post finns redan.', 'error');
+          } else if (errorMessage.includes('username')) {
             setError('Vänligen fyll i alla obligatoriska fält.');
+            Sentry.captureMessage('Vänligen fyll i alla obligatoriska fält.');
           } else {
-            Sentry.captureMessage('Registreringen misslyckades. Försök igen senare.', 'error');
-            setError('Registreringen misslyckades. Försök igen senare.');
+            setError(errorMessage);
+            Sentry.captureMessage(errorMessage, 'error');
           }
-        } 
-      } 
+        } else {
+          setError('Ett okänt fel inträffade.');
+          Sentry.captureMessage('Ett okänt fel inträffade.', 'error');
+        }
+      } else {
+        setError('Kunde inte ansluta till servern.');
+        Sentry.captureMessage('Kunde inte ansluta till servern.', 'error');
+      }
     }
   };
+  
 
   return (
     <Container className={styles['registration']}>

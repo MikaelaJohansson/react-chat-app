@@ -13,6 +13,30 @@ const Profile = () => {
   const [avatarPreview, setAvatarPreview] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = sessionStorage.getItem('token');
+      const userId = sessionStorage.getItem('id');
+
+      try {
+        const response = await axios.get(`https://chatify-api.up.railway.app/users/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        setUsername(response.data.username);
+        setEmail(response.data.email);
+        setAvatar(response.data.avatar);
+        setAvatarPreview(response.data.avatar);
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+        toast.error('Failed to fetch profile data.');
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -52,12 +76,12 @@ const Profile = () => {
     const userId = sessionStorage.getItem('id');
 
     try {
-      await axios.put('https://chatify-api.up.railway.app/user', {
+      await axios.put(`https://chatify-api.up.railway.app/user`, {
         userId: userId,
         updatedData: {
-          avatar,
-          email,
-          username,
+          avatar: avatar,
+          email: email,
+          username: username,
         },
       }, {
         headers: {
@@ -69,6 +93,7 @@ const Profile = () => {
       sessionStorage.setItem('avatar', avatar);
       sessionStorage.setItem('email', email);
       sessionStorage.setItem('username', username);
+      
       alert('Profile updated successfully');
       navigate('/Chat');
     } catch (error) {
@@ -159,6 +184,7 @@ const Profile = () => {
 };
 
 export default Profile;
+
 
 
 

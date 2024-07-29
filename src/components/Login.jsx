@@ -49,8 +49,9 @@ const Login = () => {
         const decoded = jwtDecode(token);
 
         sessionStorage.setItem('token', token);
-        sessionStorage.setItem('user',(decoded.user));
+        sessionStorage.setItem('username',(decoded.user));
         sessionStorage.setItem('email', JSON.stringify(decoded.email));
+        
         sessionStorage.setItem('avatar', decoded.avatar);
         sessionStorage.setItem('id', decoded.id);
 
