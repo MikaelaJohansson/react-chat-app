@@ -25,13 +25,13 @@ const Chat = ({ authToken, currentUserId }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userFromSessionStorage = sessionStorage.getItem('user');
-    const avatarFromSessionStorage = sessionStorage.getItem('avatar');
+    const user = sessionStorage.getItem('user');
+    const avatar = sessionStorage.getItem('avatar');
     const messageId = sessionStorage.getItem('messageId');
 
-    if (userFromSessionStorage && avatarFromSessionStorage) {
-      setUser(userFromSessionStorage);
-      setAvatar(avatarFromSessionStorage);
+    if (user && avatar) {
+      setUser(user);
+      setAvatar(avatar);
       setConversationId(messageId);
     }
     fetchMessages();
@@ -149,38 +149,48 @@ const Chat = ({ authToken, currentUserId }) => {
   };
 
   return (
-    <Container className={styles.cont}>
+    <Container className={styles.container}>
+      
+      <header className={styles.header}>
+        <h1>Hej {user}!</h1>
+        <br />
+        <img className={styles.headerImg} src={avatar} alt="User Avatar"   />    
+        <OffCanvas user={user} avatar={avatar} />
+      </header>
+
       <Row>
         <Col md={4}>
-          <h1>Hej {user} Välkommen tillbaka</h1>
-          <OffCanvas user={user} avatar={avatar} />
+          
           <NewMessage onMessageSent={handleNewMessageSent} />
 
-          <div className="messages">
+          <div className={styles.messages}>
+            <h2>Dina tidigare inlägg</h2>
             {messages.map((message) => (
-              <div key={message.id} className="message">
-                <p>{message.text}</p>
-                <Button variant="link" onClick={() => deleteMessage(message.id)}>
+              <div key={message.id} className={styles.messagesChat}>
+                <p>{message.text} <Button variant="link" onClick={() => deleteMessage(message.id)}>
                   <FaTimes />
-                </Button>
+                </Button></p>
+                
               </div>
             ))}
           </div>
         </Col>
 
         <Col md={8}>
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="text"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              placeholder="Ange användar ID"
-            />
-            <Button onClick={handleInvite}>Bjud in vän</Button>
-          </Form.Group>
 
-          <div>
-            <h2>Dina inbjudningar</h2>
+          <div className={styles.invites}>  
+            <h2>Starta chat med vän</h2>
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                placeholder="Ange användar ID"
+              />
+              <br />
+              <Button onClick={handleInvite}>Bjud in vän</Button>
+            </Form.Group>       
+            <h2>Dina chatar</h2>
             <ul>
               {Array.isArray(inviteList) && inviteList.length > 0 ? (
                 inviteList.map((invite, index) => (
@@ -209,8 +219,9 @@ const Chat = ({ authToken, currentUserId }) => {
             </div>
           )}
 
-          <div>
-            <Button onClick={retrieveInvitations}>Hämta inbjudan från vänner</Button>
+          <div className={styles.invites}>
+            <h2>Hämta inbjudan från väner</h2>
+            <Button onClick={retrieveInvitations}>Hämta</Button>
             <ul>
               {Array.isArray(receivedInvites) && receivedInvites.length > 0 ? (
                 receivedInvites.map((invitation, idx) => (

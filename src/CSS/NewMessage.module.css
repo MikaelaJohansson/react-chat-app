@@ -1,0 +1,17 @@
+
+.NewMessage{
+  background-color:whitesmoke;
+  margin-top: 4rem;
+  border: 1px solid black;
+  width:20rem;
+  padding: 0.5rem;
+  justify-content:left;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  font-size: 1rem;
+}
+.NewMessageButton{
+  background-color: rgba(55, 55, 252, 0.918);
+  color: white;
+}

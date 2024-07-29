@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Importera axios
 import DOMPurify from 'dompurify';
+import styles from '../CSS/FriendChat.module.css';
 import { FaTimes } from 'react-icons/fa';
 import { Container, Row, Col, Button, Form, ListGroup } from 'react-bootstrap';
 
@@ -115,17 +116,18 @@ const FriendChat = () => {
   };
 
   return (
-    <Container>
+    <Container className={styles.FriendContainer}>
       {invite ? (
         <div>
-          <h1>Chat with {invite.username || invite.conversationId}</h1>
+          <h2>Chat med {invite.username || invite.conversationId}</h2>
           <ListGroup>
             {chatMessages.length > 0 ? (
+              
               chatMessages.map((msg) => (
-                <ListGroup.Item key={msg.id}>
+                <ListGroup.Item key={msg.id} className={styles.customListGroupItem}>
                   <Row>
                     <Col xs={10}>
-                      {msg.text} <small>{formatDate(msg.createdAt)}</small>
+                      {msg.text} <small>{formatDate(msg.createdAt)}</small> 
                     </Col>
                     <Col xs={2} className="text-end">
                       <Button variant="danger" size="sm" onClick={() => deleteChatItem(msg.id)}>
@@ -134,27 +136,31 @@ const FriendChat = () => {
                     </Col>
                   </Row>
                 </ListGroup.Item>
+                
               ))
+              
             ) : (
-              <p>No messages found</p>
+              <p>Inga medelanden </p>
             )}
           </ListGroup>
-          <Form className="mt-3">
+          <Form  className={styles.friendChatSend}>
             <Form.Group controlId="messageInput">
               <Form.Control
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Write a message..."
+                placeholder="Skriv medelanden..."
               />
             </Form.Group>
-            <Button className="mt-2" onClick={sendMessage}>Send</Button>
+            <Button className="mt-2" onClick={sendMessage}>Skicka</Button>
           </Form>
         </div>
+        
       ) : (
         <p>No invite selected</p>
       )}
-      <Link to="/Chat">Back to Chat</Link>
+      <br />
+      <Link to="/Chat">Tillbaka till Chaten</Link>
     </Container>
   );
 }

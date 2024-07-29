@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
 import axios from 'axios';
+import styles from '../CSS/NewMessage.module.css';
 
 const NewMessage = ({ onMessageSent }) => {
   const [message, setMessage] = useState('');
@@ -50,15 +51,20 @@ const NewMessage = ({ onMessageSent }) => {
   };
 
   return (
-    <div>
-      <input 
-        type="text" 
-        value={message} 
-        onChange={(e) => setMessage(e.target.value)} 
-        placeholder="Skriv medelande" 
-      />
-      <button onClick={sendNewMessage}>Skicka</button>
-    </div>
+    <section className={styles.NewMessage}>
+      <h2>Skriv ett inlägg</h2>
+      <div>
+        <input 
+          type="text" 
+          value={message} 
+          onChange={(e) => setMessage(e.target.value)} 
+          placeholder="Skriv medelande" 
+        />
+        <br />
+        <br />
+        <button className={styles.NewMessageButton} onClick={sendNewMessage}>Skicka</button>
+      </div>
+    </section>
   );
 };
 

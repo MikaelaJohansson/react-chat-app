@@ -1,0 +1,26 @@
+body{
+  justify-content: center; /* Centrerar horisontellt */
+  align-items: center; /* Centrerar vertikalt */
+  min-height: 100vh; /* För att fylla hela sidans höjd */
+  width: 100%;
+
+}
+.FriendContainer{
+  background-color: whitesmoke;
+  border: 1px solid black;
+  padding: 2rem;
+  text-align: center;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  margin: 2rem;
+}
+.friendChatSend{
+  margin-top: 7rem;
+}
+.customListGroupItem{
+  margin-bottom: 1rem;
+  margin: 1rem;
+ 
+}
