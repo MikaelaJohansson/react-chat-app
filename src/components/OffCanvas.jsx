@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Offcanvas } from 'react-bootstrap'; // Använd Offcanvas från react-bootstrap
+import { Offcanvas } from 'react-bootstrap'; 
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 

@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
-import Form from 'react-bootstrap/Form';  // Lägg till
-  // Lägg till
-import Alert from 'react-bootstrap/Alert';  // Lägg till
+import Form from 'react-bootstrap/Form';
+import Alert from 'react-bootstrap/Alert';
 import styles from '../CSS/Login.module.css';
 import Button from 'react-bootstrap/Button';
 import * as Sentry from "@sentry/react";
-
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -21,9 +19,10 @@ const Login = () => {
     const fetchCsrfToken = async () => {
       try {
         const response = await axios.patch('https://chatify-api.up.railway.app/csrf');
+        console.log('CSRF token fetched successfully:', response.data.csrfToken);
         setCsrfToken(response.data.csrfToken);
       } catch (error) {
-        Sentry.captureMessage('Error fetching CSRF token:', error);
+        Sentry.captureMessage('Error fetching CSRF token:', 'error');
         console.error('Error fetching CSRF token:', error);
         setError('Failed to fetch CSRF token. Please try again later.');
       }
@@ -49,36 +48,41 @@ const Login = () => {
         const decoded = jwtDecode(token);
 
         sessionStorage.setItem('token', token);
-        sessionStorage.setItem('username',(decoded.user));
+        sessionStorage.setItem('username', decoded.user);
         sessionStorage.setItem('email', JSON.stringify(decoded.email));
-        
         sessionStorage.setItem('avatar', decoded.avatar);
         sessionStorage.setItem('id', decoded.id);
 
-        console.log(decoded);
+        console.log('Decoded token:', decoded);
 
         navigate('/Chat');
       } else {
         Sentry.captureMessage('Failed to log in', 'error');
+        console.error('Failed to log in:', response);
         throw new Error('Failed to log in');
       }
     } catch (error) {
       if (error.response) {
         if (error.response.status === 401) {
           Sentry.captureMessage('Invalid credentials', 'error');
+          console.error('Invalid credentials:', error.response);
           setError('Invalid credentials.');
         } else {
           Sentry.captureMessage('Login failed. Please try again later.', 'error');
+          console.error('Login failed:', error.response);
           setError('Login failed. Please try again later.');
         }
-      } 
+      } else {
+        Sentry.captureMessage('Unexpected error during login', 'error');
+        console.error('Unexpected error during login:', error);
+        setError('Unexpected error occurred. Please try again later.');
+      }
     }
   };
 
   return (
-    
     <section className={styles['login-form']}>
-      <div  className={styles['login-text']}>
+      <div className={styles['login-text']}>
         <h1 className={styles['login-h1']}>Snackis</h1>
         Logga in på ditt Snackis konto. <br />
         Snackis hjälper dig att hålla kontakten 
@@ -117,6 +121,7 @@ const Login = () => {
 };
 
 export default Login;
+
 
 
 

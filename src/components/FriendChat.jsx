@@ -37,7 +37,7 @@ const FriendChat = () => {
         }
       });
 
-      // Sätt meddelandena i state
+    
       setChatMessages(response.data);
     } catch (error) {
       console.error('Error fetching chat messages:', error);
@@ -70,21 +70,23 @@ const FriendChat = () => {
         }
       });
 
-      // Lägg till det nya meddelandet i state
+      
+      console.log('Message sent successfully:', response.data);
       setChatMessages(prevMessages => [...prevMessages, response.data.latestMessage]);
-      setNewMessage(''); // Rensa inputfältet efter att meddelandet har skickats
+      setNewMessage(''); 
     } catch (error) {
+      Sentry.captureMessage('Error sending message:', 'error');
       console.error('Error sending message:', error);
     }
   };
 
-  // Använd useEffect för att kalla på fetchChatMessages när komponenten laddas
+  
   useEffect(() => {
     fetchChatMessages();
-  }, []);
+  }, [newMessage]);
 
   const formatDate = (dateString) => {
-    console.log('Received date string:', dateString); // Lägg till denna rad för felsökning
+    console.log('Received date string:', dateString); 
     const date = new Date(dateString);
     if (date.toString() === 'Invalid Date') {
       return 'Invalid Date';
@@ -107,11 +109,11 @@ const FriendChat = () => {
         }
       });
 
-      // Ta bort det raderade meddelandet från listan
       setChatMessages(prevMessages => prevMessages.filter(msg => msg.id !== msgId));
       alert('Message has been deleted');
     } catch (error) {
       console.error('Error deleting chat item:', error);
+      Sentry.captureMessage('Error deleting chat item:', 'error');
     }
   };
 

@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';
 import styles from '../CSS/Chat.module.css';
+import * as Sentry from '@sentry/react'; 
 
 const Chat = ({ authToken, currentUserId }) => {
   const [user, setUser] = useState('');
@@ -25,18 +26,23 @@ const Chat = ({ authToken, currentUserId }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = sessionStorage.getItem('username');
-    const avatar = sessionStorage.getItem('avatar');
+    const userFromSessionStorage = sessionStorage.getItem('username');
+    const avatarFromSessionStorage = sessionStorage.getItem('avatar');
     const messageId = sessionStorage.getItem('messageId');
 
-    if (user && avatar) {
-      setUser(user);
-      setAvatar(avatar);
+
+    if (userFromSessionStorage && avatarFromSessionStorage) {
+      setUser(userFromSessionStorage);
+      setAvatar(avatarFromSessionStorage);
       setConversationId(messageId);
     }
+    
     fetchMessages();
     loadInvitationsFromLocalStorage();
-  }, [messages, conversations]);
+  }, [conversations]);
+
+
+ 
 
   const fetchMessages = async () => {
     const token = sessionStorage.getItem('token');
@@ -49,8 +55,10 @@ const Chat = ({ authToken, currentUserId }) => {
           Authorization: `Bearer ${token}`
         },
       });
+      console.log('Messages fetched successfully:');
       setMessages(response.data);
     } catch (error) {
+      Sentry.captureMessage('Error fetching messages', 'error');
       console.error('Error fetching messages:', error);
     }
   };
@@ -70,8 +78,10 @@ const Chat = ({ authToken, currentUserId }) => {
           'Content-Type': 'application/json'
         }
       });
+      console.log('Message deleted successfully:', messageId);
       setMessages(prevMessages => prevMessages.filter(message => message.id !== messageId));
     } catch (error) {
+      Sentry.captureMessage('Error deleting message', 'error');
       console.error('Error deleting message:', error);
     }
   };
@@ -79,12 +89,15 @@ const Chat = ({ authToken, currentUserId }) => {
   const handleInvite = async () => {
     if (userId.trim()) {
       const cryptoId = crypto.randomUUID();
-      const token = sessionStorage.getItem('token');
+     
 
+
+      const token = sessionStorage.getItem('token'); // Ensure token is available
+     
       try {
         const response = await axios.post(`https://chatify-api.up.railway.app/invite/${userId}`, {
           conversationId: cryptoId,
-          username: user
+          username: user // Add sender's username
         }, {
           headers: {
             'Content-Type': 'application/json',
@@ -92,8 +105,15 @@ const Chat = ({ authToken, currentUserId }) => {
           }
         });
 
+
+        console.log('Invitation sent successfully:', response.data);
+        console.log(cryptoId,userId);
+       
+
+
         const newInvite = { username: userId, conversationId: cryptoId };
         localStorage.setItem(`invite-${cryptoId}`, JSON.stringify(newInvite));
+
 
         setInviteList(prevList => [
           ...prevList,
@@ -101,7 +121,12 @@ const Chat = ({ authToken, currentUserId }) => {
           { username: user, conversationId: cryptoId }
         ]);
 
+
         setUserId('');
+
+
+        console.log('Invitation sent successfully:', response.data);
+       
       } catch (error) {
         console.error('Error sending invitation:', error);
       }
@@ -110,14 +135,17 @@ const Chat = ({ authToken, currentUserId }) => {
     }
   };
 
+
   const loadInvitationsFromLocalStorage = () => {
     const keys = Object.keys(localStorage);
     const invites = keys
       .filter(key => key.startsWith('invite-'))
       .map(key => JSON.parse(localStorage.getItem(key)));
 
+
     setInviteList(invites);
   };
+
 
   const retrieveInvitations = () => {
     const jwtToken = sessionStorage.getItem('token');
@@ -132,7 +160,9 @@ const Chat = ({ authToken, currentUserId }) => {
       const inviteString = decodedToken.invite || "[]";
       const invites = JSON.parse(inviteString);
       setReceivedInvites(Array.isArray(invites) ? invites : []);
+      console.log('Retrieved invitations:', invites);
     } catch (error) {
+      Sentry.captureMessage('Error decoding JWT or parsing invites', 'error');
       console.error('Error decoding JWT or parsing invites:', error);
     }
   };
@@ -145,7 +175,7 @@ const Chat = ({ authToken, currentUserId }) => {
   const handleInvitationSelect = (invite) => {
     setSelectedInvitation(invite);
     localStorage.setItem('selectedInvitation', JSON.stringify(invite));
-    navigate('/FriendChat', { state: { invite } });
+    navigate('/FriendChat', { state: { invite} });
   };
 
   return (

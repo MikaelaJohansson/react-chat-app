@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Container, Form, Button, Col, Row, Image } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import * as Sentry from '@sentry/react'; 
 
 const Profile = () => {
   const [username, setUsername] = useState('');
@@ -17,6 +18,12 @@ const Profile = () => {
     const fetchData = async () => {
       const token = sessionStorage.getItem('token');
       const userId = sessionStorage.getItem('id');
+
+      if (!token || !userId) {
+        alert('User is not authenticated.');
+        navigate('/Login');
+        return;
+      }
 
       try {
         const response = await axios.get(`https://chatify-api.up.railway.app/users/${userId}`, {
@@ -31,12 +38,13 @@ const Profile = () => {
         setAvatarPreview(response.data.avatar);
       } catch (error) {
         console.error('Error fetching profile data:', error);
-        toast.error('Failed to fetch profile data.');
+      }finally {
+        setLoading(false); 
       }
     };
 
     fetchData();
-  }, []);
+  }, [navigate]);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -67,6 +75,7 @@ const Profile = () => {
       toast.success('Image uploaded successfully!');
     } catch (error) {
       console.error('Upload failed:', error);
+      Sentry.captureException(error); 
       toast.error('Upload failed: ' + error.toString());
     }
   };
@@ -97,8 +106,8 @@ const Profile = () => {
       alert('Profile updated successfully');
       navigate('/Chat');
     } catch (error) {
+      Sentry.captureException(error); 
       console.error('Error updating profile:', error);
-      toast.error('Error updating profile.');
       if (error.response) {
         console.error('Response data:', error.response.data);
         console.error('Response status:', error.response.status);
@@ -121,7 +130,7 @@ const Profile = () => {
       window.location.href = '/Login';
     } catch (error) {
       console.error('Error deleting user account', error);
-      toast.error('Failed to delete account. Please try again later.');
+      Sentry.captureException(error); 
     }
   };
 
