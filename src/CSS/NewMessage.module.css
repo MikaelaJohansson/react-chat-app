@@ -1,8 +1,8 @@
 
 .NewMessage{
-  background-color:whitesmoke;
+  background-color:white;
   margin-top: 4rem;
-  border: 1px solid black;
+  box-shadow: 2px 3px 9px rgb(219, 219, 219);
   width:20rem;
   padding: 0.5rem;
   justify-content:left;
@@ -10,6 +10,7 @@
   text-align: center;
   flex-direction: column;
   font-size: 1rem;
+  border-radius: 0.3rem;
 }
 .NewMessageButton{
   background-color: rgba(55, 55, 252, 0.918);

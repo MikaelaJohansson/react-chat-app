@@ -6,6 +6,7 @@ import DOMPurify from 'dompurify';
 import styles from '../CSS/FriendChat.module.css';
 import { FaTimes } from 'react-icons/fa';
 import { Container, Row, Col, Button, Form, ListGroup } from 'react-bootstrap';
+import '../App.css'; 
 
 const FriendChat = () => {
   const location = useLocation();

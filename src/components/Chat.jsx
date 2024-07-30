@@ -9,6 +9,7 @@ import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';
 import styles from '../CSS/Chat.module.css';
 import * as Sentry from '@sentry/react'; 
+import '../App.css'; 
 
 const Chat = ({ authToken, currentUserId }) => {
   const [user, setUser] = useState('');
@@ -234,6 +235,7 @@ const Chat = ({ authToken, currentUserId }) => {
                 <p>Inga inbjudningar tillgängliga</p>
               )}
             </ul>
+            
           </div>
 
           {selectedInvite && (

@@ -42,8 +42,8 @@ const Registration = () => {
       );
   
       if (response.status === 201) {
-        console.log('Användare registrerad framgångsrikt:', response.data);
-        alert("Användare registrerad framgångsrikt:', response.data")
+        console.log('Användare registrerades framgångsrikt');
+        alert("Användare registrerades framgångsrikt")
         navigate('/login');
         setUsername('');
         setPassword('');

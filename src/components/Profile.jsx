@@ -6,6 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Container, Form, Button, Col, Row, Image } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as Sentry from '@sentry/react'; 
+import '../App.css'; 
+import styles from '../CSS/Profile.module.css';
+
 
 const Profile = () => {
   const [username, setUsername] = useState('');
@@ -127,6 +130,7 @@ const Profile = () => {
       });
       alert('Your account has been successfully deleted.');
       sessionStorage.clear();
+      localStorage.clear();
       window.location.href = '/Login';
     } catch (error) {
       console.error('Error deleting user account', error);
@@ -135,60 +139,62 @@ const Profile = () => {
   };
 
   return (
-    <Container style={{ border: '2px solid #b3b1b1', borderRadius: '1rem', padding: '2rem', textAlign: 'center', backgroundColor: 'whitesmoke', boxShadow: '5px 5px 5px #ccc' }}>
-      <h2 className="my-4">Uppdatera din Profil</h2>
-      <Form>
-        <Form.Group as={Row} className="mb-3">
-          <Form.Label column sm="2">User</Form.Label>
-          <Col sm="10">
-            <Form.Control 
-              type="text" 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} 
-            />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="mb-3">
-          <Form.Label column sm="2">Email</Form.Label>
-          <Col sm="10">
-            <Form.Control 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-            />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="mb-3">
-          <Form.Label column sm="2">Avatar</Form.Label>
-          <Col sm="10">
-            <Form.Control 
-              type="file" 
-              onChange={handleFileChange} 
-            />
-          </Col>
-        </Form.Group>
-        {avatarPreview && (
+    <div className={styles.profilContainer}>
+      <Container className={styles.profil} >
+        <h2 className="my-4">Uppdatera din Profil</h2>
+        <Form>
           <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 10, offset: 2 }}>
-              <Image 
-                src={avatarPreview} 
-                alt="Avatar Preview" 
-                rounded 
-                style={{ width: '100px', height: '100px' }} 
+            <Form.Label column sm="2">User</Form.Label>
+            <Col sm="10">
+              <Form.Control 
+                type="text" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
               />
             </Col>
           </Form.Group>
-        )}
-        <Form.Group as={Row} className="mb-3">
-          <Col sm={{ span: 10, offset: 2 }}>
-            <Button variant="primary" onClick={handleUpdate} className="me-2">Uppdatera profil</Button>
-            <Button variant="danger" onClick={handleDelete}>Radera konto</Button>
-          </Col>
-        </Form.Group>
-      </Form>
-      <Link to="/Chat">Tillbaka till Chat</Link>
-      <ToastContainer />
-    </Container>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="2">Email</Form.Label>
+            <Col sm="10">
+              <Form.Control 
+                type="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="2">Avatar</Form.Label>
+            <Col sm="10">
+              <Form.Control 
+                type="file" 
+                onChange={handleFileChange} 
+              />
+            </Col>
+          </Form.Group>
+          {avatarPreview && (
+            <Form.Group as={Row} className="mb-3">
+              <Col sm={{ span: 10, offset: 2 }}>
+                <Image 
+                  src={avatarPreview} 
+                  alt="Avatar Preview" 
+                  rounded 
+                  style={{ width: '100px', height: '100px' }} 
+                />
+              </Col>
+            </Form.Group>
+          )}
+          <Form.Group as={Row} className="mb-3">
+            <Col sm={{ span: 10, offset: 2 }}>
+              <Button variant="primary" onClick={handleUpdate} className="me-2">Uppdatera profil</Button>
+              <Button variant="danger" onClick={handleDelete}>Radera konto</Button>
+            </Col>
+          </Form.Group>
+        </Form>
+        <Link to="/Chat" className={styles.link} >Tillbaka till Chat</Link>
+        <ToastContainer />
+      </Container>
+    </div>  
   );
 };
 

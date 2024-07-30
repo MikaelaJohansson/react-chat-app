@@ -1,39 +1,28 @@
-.profile-main{
+.profilContainer{
   margin-bottom: 3rem;
   justify-content: center; /* Centrerar horisontellt */
   align-items: center; /* Centrerar vertikalt */
   min-height: 100vh; /* För att fylla hela sidans höjd */
-  width: 100%;
+  min-width: fit-content;
   display: flex;
   flex-direction: column;
 }
-.profile-container{
- border: 2px solid black;
+.profil{
  text-align: center;
  margin: 2rem;
  padding: 2rem;
- border-radius: 0.4rem;
- background-color: whitesmoke;
+ border-radius: 0.3rem;
+ background-color: white;
  box-shadow: 7px 7px 7px  #e3e2e2;
  font-size: 1.5rem;
  font-weight: 500;
  width: 80%;
 }
-.profile-button{
-  margin: 1.3rem;
+.link{
+  margin: 1rem;
+  margin-left: 10rem;
+
 }
-.profile-text{
-  text-align: left;
-  position: relative;
-  top: 1rem;
-}
-.profile-link{
-  text-align: center;
-  font-size: 1.6rem;
-  position: relative;
-}
-.profile-h1{
-  margin: 2.7rem;
-  color: blue;
-  font-size: 2.4rem;
-}
+
+
+

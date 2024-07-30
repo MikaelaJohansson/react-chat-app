@@ -17,7 +17,7 @@ body{
 .registrationContainer{
   display: flex;
   flex-direction: column;
-  background-color: whitesmoke;
+  background-color: white;
   width: 40%;
   min-height: fit-content;
   margin: 3rem;

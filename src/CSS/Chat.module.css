@@ -1,39 +1,40 @@
 
-body{
-  justify-content: center; /* Centrerar horisontellt */
-  align-items: center; /* Centrerar vertikalt */
-  min-height: 100vh; /* För att fylla hela sidans höjd */
-  width: 100%;
-
-}
 .container{
-  margin-top: 4rem; 
-  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .header{
   display: flex;
   flex-direction: column;
-  background-color: rgb(186, 185, 185);
+  
   padding: 0.5rem;
   text-align: center;
   width: 64rem;
-  border-radius: 0.4rem;
+  border-radius: 0.3rem;
+  background-image: url('/img/glitter.jpg'); 
+  background-size: cover;
+  background-position: center; 
+  background-repeat: no-repeat; 
+  
 }
 .headerImg{
- border-radius: 0.4rem; 
+ border-radius: 0.3rem; 
  width: 13rem; 
  justify-content: center;
  padding: 1rem;
  position: relative;
  top: 5rem;
- background-color: rgb(235, 234, 234);
+ background-color: rgb(208, 240, 243);
  border:3px solid white;
+ 
 }
 .messages{
-  background-color:whitesmoke;
+  background-color:white;
   margin-top: 4rem;
-  border: 1px solid black;
-  border-radius: 0.4rem;
+  box-shadow: 2px 3px 9px rgb(219, 219, 219);
+  border-radius: 0.3rem;
   width:fit-content;
   padding-left: 2rem;
   padding-right: 2rem;
@@ -44,7 +45,7 @@ body{
   font-size: 1rem; 
 }
 .messagesChat{
-  background-color:white;
+  background-color:rgb(230, 242, 250);
   margin-top: 2rem;
   border: 1px solid black;
   border-radius: 0.4rem;
@@ -57,11 +58,11 @@ body{
   text-align:left;
 }
 .invites{
-  background-color:whitesmoke;
-  margin: 4rem;
-  margin-left: 13rem;
+  background-color:white;
+  margin-top: 4rem;
+  margin-left: 19rem;
   padding: 1.8rem;
-  border:1px solid black;
+  box-shadow: 2px 3px 9px rgb(219, 219, 219);
   border-radius: 0.4rem;
   width: fit-content;
 }
