@@ -57,8 +57,12 @@ const FriendChat = () => {
         console.error('No invite or conversationId available.');
         return;
       }
+      
+      console.log('Original message:', newMessage); 
 
-      const sanitizedMessage = DOMPurify.sanitize(newMessage); // Sanera input
+      const sanitizedMessage = DOMPurify.sanitize(newMessage); 
+
+      console.log('Sanitized message:', sanitizedMessage);
 
       const response = await axios.post('https://chatify-api.up.railway.app/messages', 
       {
@@ -71,7 +75,6 @@ const FriendChat = () => {
         }
       });
 
-      
       console.log('Message sent successfully:', response.data);
       setChatMessages(prevMessages => [...prevMessages, response.data.latestMessage]);
       setNewMessage(''); 
@@ -84,7 +87,7 @@ const FriendChat = () => {
   
   useEffect(() => {
     fetchChatMessages();
-  }, [newMessage]);
+  }, []);
 
   const formatDate = (dateString) => {
     console.log('Received date string:', dateString); 

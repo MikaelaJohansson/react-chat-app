@@ -1,0 +1,9 @@
+.CanvasButton{
+  background-color: rgb(133, 218, 218);
+  font-size: 1.2rem;
+  margin-right: 30rem;
+  font-weight: 600;
+  border: 2px solid white;
+  color: black;
+  min-height:fit-content ;
+}

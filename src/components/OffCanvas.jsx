@@ -3,6 +3,7 @@ import { Offcanvas } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import '../App.css'; 
+import styles from '../CSS/OffCanvas.module.css';
 
 const OffCanvas = ({ user, avatar }) => {
   const [show, setShow] = useState(false);
@@ -17,16 +18,16 @@ const OffCanvas = ({ user, avatar }) => {
 
   return (
     <div >
-      <Button variant="success" type="button" onClick={handleShow}>
+      <Button className={styles.CanvasButton} type="button" onClick={handleShow}>
         Profil
       </Button>
-      <div>
-        <Offcanvas show={show} onHide={handleClose} style={{padding:"3rem"}} >
+      <div >
+        <Offcanvas show={show} onHide={handleClose} style={{padding:"3rem",backgroundColor:"rgb(236, 236, 236)" }}  >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title style={{position:'relative', fontSize:'2rem', paddingLeft:'1rem' }}>Användare:</Offcanvas.Title>
+          <Offcanvas.Title style={{position:'relative', fontSize:'2rem' }}>Användare:</Offcanvas.Title>
           </Offcanvas.Header>
-          <Offcanvas.Body>
-            <h1 style={{position:'relative', fontSize:'3rem', paddingLeft:'3rem', marginBottom:'1rem'}}>{user}</h1>
+          <Offcanvas.Body style={{boxShadow:"2px 3px 9px lightgray", borderRadius:"0.3rem", backgroundColor:"white",display:"flex", flexDirection:"column", alignItems:"center"}} >
+            <h1 style={{position:'relative', fontSize:'3rem', marginBottom:'1rem'}}>{user}</h1>
             <img src={avatar} alt="Avatar" style={{borderRadius:'0.5rem', width:180, justifyContent:'center', boxShadow: '5px 3px 4px lightgray',backgroundColor: 'rgb(208, 240, 243)' }} />
             <br />
             <Button variant="primary" type="button" style={{margin:"1rem", position:'relative', marginLeft:'3rem', fontSize:'1rem'}} onClick={handleLogout} >
