@@ -90,6 +90,12 @@ const Profile = () => {
     const token = sessionStorage.getItem('token');
     const userId = sessionStorage.getItem('id');
 
+    const confirmation = window.confirm('Är du säker på att du vill radera ditt konto? Denna åtgärd är permanent och kan inte ångras.');
+
+    if (!confirmation) {
+      return;
+    }
+
     try {
       await axios.delete(`https://chatify-api.up.railway.app/users/${userId}`, {
         headers: {
