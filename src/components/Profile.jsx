@@ -17,6 +17,17 @@ const Profile = () => {
   const [avatarPreview, setAvatarPreview] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const storedUsername = sessionStorage.getItem('username');
+    const storedAvatar = sessionStorage.getItem('avatar');
+    const storedEmail = sessionStorage.getItem('email');
+    if (storedUsername) {
+      setUsername(storedUsername);
+      setEmail(storedEmail);
+      setAvatarPreview(storedAvatar);
+    }
+  }, []);
+
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -115,7 +126,7 @@ const Profile = () => {
   return (
     <div className={styles.profilContainer}>
       <Container className={styles.profil} >
-        <h2 className="my-4">Uppdatera din Profil</h2>
+      <h2 className="my-4">Uppdatera din Profil, {username}</h2>
         <Form>
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm="2">User</Form.Label>

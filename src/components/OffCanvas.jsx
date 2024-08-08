@@ -33,7 +33,6 @@ const OffCanvas = ({ user, avatar }) => {
             <Button variant="primary" type="button" style={{margin:"1rem", position:'relative', marginLeft:'3rem', fontSize:'1rem'}} onClick={handleLogout} >
               Logga ut
             </Button>
-            <br />
             <Link to="/profile">
             <Button variant="success" type="button"  style={{ position:'relative', marginLeft:'1.7rem', fontSize:'1rem' }} onClick={handleShow}>
               Redigera profil

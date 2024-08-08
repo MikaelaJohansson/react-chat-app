@@ -150,6 +150,7 @@ const Chat = () => {
 
   const loadInvitationsFromLocalStorage = () => {
     const keys = Object.keys(localStorage);
+    
     const invites = keys
       .filter(key => key.startsWith('invite-'))
       .map(key => JSON.parse(localStorage.getItem(key)));

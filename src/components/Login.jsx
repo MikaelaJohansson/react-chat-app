@@ -49,7 +49,7 @@ const Login = () => {
 
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('username', decoded.user);
-        sessionStorage.setItem('email', JSON.stringify(decoded.email));
+        sessionStorage.setItem('email', decoded.email);
         sessionStorage.setItem('avatar', decoded.avatar);
         sessionStorage.setItem('id', decoded.id);
 
