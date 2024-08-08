@@ -1,4 +1,7 @@
-
+.button{
+  color: white;
+  background-color: rgb(61, 85, 242);
+}
 .container{
   display: flex;
   flex-direction: column;
@@ -32,17 +35,15 @@
 }
 .messages{
   background-color:white;
-  margin-top: 4rem;
+  margin-top: 7rem;
   box-shadow: 2px 3px 9px rgb(219, 219, 219);
   border-radius: 0.3rem;
   width:fit-content;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding: 1rem;
+  padding: 3rem;
   text-align: left;
   display: flex;
   flex-direction: column;
-  font-size: 1rem; 
+  font-size: 1.3rem; 
 }
 .messagesChat{
   background-color:rgb(230, 242, 250);

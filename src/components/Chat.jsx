@@ -10,7 +10,7 @@ import * as Sentry from '@sentry/react';
 import '../App.css'; 
 import DOMPurify from 'dompurify';
 
-const Chat = ({ authToken, currentUserId }) => {
+const Chat = () => {
   const [user, setUser] = useState('');
   const [avatar, setAvatar] = useState('');
   
@@ -201,7 +201,7 @@ const Chat = ({ authToken, currentUserId }) => {
 
       <Row>
         <Col md={4}>
-          <div>
+          <div  className={styles.messages}>
             <label>Skriv ett inlägg:</label>
             <br />
             <input
@@ -210,15 +210,15 @@ const Chat = ({ authToken, currentUserId }) => {
               onChange={(e) => setUserPost(e.target.value)}
             />
             <br />
-            <button type='button' onClick={onUserPost}>Skicka in</button>
+            <button  className={styles.button} type='button' onClick={onUserPost}>Skicka in</button>
 
-
+            <br />
             <div>
               <h3>Meddelanden:</h3>
               {messages.length > 0 ? (
                     <ul>
                     {messages.map((message, index) => (
-                      <li key={index}>
+                      <li key={index}  className={styles.messagesChat} >
                         {message.text} 
                         <FaTimes 
                           style={{ cursor: 'pointer', marginLeft: '10px', color: 'red' }} 

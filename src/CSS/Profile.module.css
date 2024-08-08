@@ -1,8 +1,8 @@
 .profilContainer{
   margin-bottom: 3rem;
-  justify-content: center; /* Centrerar horisontellt */
-  align-items: center; /* Centrerar vertikalt */
-  min-height: 100vh; /* För att fylla hela sidans höjd */
+  justify-content: center; 
+  align-items: center; 
+  min-height: 100vh; 
   min-width: fit-content;
   display: flex;
   flex-direction: column;

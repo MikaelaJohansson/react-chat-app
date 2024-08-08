@@ -23,7 +23,7 @@ const FriendChat = () => {
     }
 
     try {
-      // Kontrollera om invite och conversationId finns
+      
       if (!invite || !invite.conversationId) {
         console.error('No invite or conversationId available.');
         return;
