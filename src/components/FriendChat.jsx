@@ -7,12 +7,13 @@ import styles from '../CSS/FriendChat.module.css';
 import { FaTimes } from 'react-icons/fa';
 import { Container, Row, Col, Button, Form, ListGroup } from 'react-bootstrap';
 import '../App.css'; 
+import * as Sentry from '@sentry/react'; 
 
 const FriendChat = () => {
   const location = useLocation();
-  const { invite } = location.state || {}; // Få invite från state
+  const { invite } = location.state || {}; 
   const [chatMessages, setChatMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState(''); // State för den nya meddelandetexten
+  const [newMessage, setNewMessage] = useState(''); 
 
   const fetchChatMessages = async () => {
     const token = sessionStorage.getItem('token');

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import OffCanvas from './OffCanvas';
-import FriendChat from './FriendChat';
-import NewMessage from './NewMessage';
 import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
@@ -10,11 +8,12 @@ import { FaTimes } from 'react-icons/fa';
 import styles from '../CSS/Chat.module.css';
 import * as Sentry from '@sentry/react'; 
 import '../App.css'; 
+import DOMPurify from 'dompurify';
 
 const Chat = ({ authToken, currentUserId }) => {
   const [user, setUser] = useState('');
   const [avatar, setAvatar] = useState('');
-  const [messages, setMessages] = useState([]);
+  
   const [conversationId, setConversationId] = useState('');
   const [conversations, setConversations] = useState({});
   const [userId, setUserId] = useState('');
@@ -24,13 +23,15 @@ const Chat = ({ authToken, currentUserId }) => {
   const [selectedInvite, setSelectedInvite] = useState(null);
   const [selectedInvitation, setSelectedInvitation] = useState(null);
 
+  const [userPost, setUserPost] = useState('');
+  const [messages, setMessages] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const userFromSessionStorage = sessionStorage.getItem('username');
     const avatarFromSessionStorage = sessionStorage.getItem('avatar');
     const messageId = sessionStorage.getItem('messageId');
-
 
     if (userFromSessionStorage && avatarFromSessionStorage) {
       setUser(userFromSessionStorage);
@@ -41,64 +42,80 @@ const Chat = ({ authToken, currentUserId }) => {
     fetchMessages();
     loadInvitationsFromLocalStorage();
   }, [conversations]);
-
-
- 
-
-  const fetchMessages = async () => {
+  
+  const onUserPost = () => {
     const token = sessionStorage.getItem('token');
-    if (!token) return;
+    const sanitizedUserPost = DOMPurify.sanitize(userPost);
 
-    try {
-      const response = await axios.get('https://chatify-api.up.railway.app/messages', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-      });
-      console.log('Messages fetched successfully:');
+    axios.post('https://chatify-api.up.railway.app/messages', {
+      text: sanitizedUserPost,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => {
+      console.log('Meddelande mottaget:', response.data);
+      setUserPost('');
+      fetchMessages();
+    })
+    .catch(error => {
+      console.error('Meddelande ej mottaget:', error);
+    });
+  };
+
+
+  const fetchMessages = () => {
+    const token = sessionStorage.getItem('token');
+
+    axios.get('https://chatify-api.up.railway.app/messages', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => {
+      console.log('Användarens post hämtade:', response.data);
       setMessages(response.data);
-    } catch (error) {
-      Sentry.captureMessage('Error fetching messages', 'error');
-      console.error('Error fetching messages:', error);
-    }
+    })
+    .catch(error => {
+      console.error('Fel vid hämtning av user posts:', error);
+    });
   };
 
-  const handleNewMessageSent = (newMessage) => {
-    setMessages(prevMessages => [...prevMessages, newMessage]);
-  };
-
-  const deleteMessage = async (messageId) => {
+  const deleteMessage = (id) => {
     const token = sessionStorage.getItem('token');
-    if (!token) return;
-
-    try {
-      await axios.delete(`https://chatify-api.up.railway.app/messages/${messageId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      console.log('Message deleted successfully:', messageId);
-      setMessages(prevMessages => prevMessages.filter(message => message.id !== messageId));
-    } catch (error) {
-      Sentry.captureMessage('Error deleting message', 'error');
-      console.error('Error deleting message:', error);
-    }
+ 
+    axios.delete(`https://chatify-api.up.railway.app/messages/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => {
+      console.log('Meddelande raderat:', response.data);
+      fetchMessages();
+    })
+    .catch(error => {
+      console.error('Kunde ej radera meddelande:', error);
+    });
   };
+
+
+
+
 
   const handleInvite = async () => {
     if (userId.trim()) {
       const cryptoId = crypto.randomUUID();
      
-
-
-      const token = sessionStorage.getItem('token'); // Ensure token is available
+      const token = sessionStorage.getItem('token'); 
      
       try {
         const response = await axios.post(`https://chatify-api.up.railway.app/invite/${userId}`, {
           conversationId: cryptoId,
-          username: user // Add sender's username
+          username: user 
         }, {
           headers: {
             'Content-Type': 'application/json',
@@ -106,15 +123,11 @@ const Chat = ({ authToken, currentUserId }) => {
           }
         });
 
-
         console.log('Invitation sent successfully:', response.data);
         console.log(cryptoId,userId);
        
-
-
         const newInvite = { username: userId, conversationId: cryptoId };
         localStorage.setItem(`invite-${cryptoId}`, JSON.stringify(newInvite));
-
 
         setInviteList(prevList => [
           ...prevList,
@@ -122,9 +135,7 @@ const Chat = ({ authToken, currentUserId }) => {
           { username: user, conversationId: cryptoId }
         ]);
 
-
         setUserId('');
-
 
         console.log('Invitation sent successfully:', response.data);
        
@@ -142,7 +153,6 @@ const Chat = ({ authToken, currentUserId }) => {
     const invites = keys
       .filter(key => key.startsWith('invite-'))
       .map(key => JSON.parse(localStorage.getItem(key)));
-
 
     setInviteList(invites);
   };
@@ -191,24 +201,41 @@ const Chat = ({ authToken, currentUserId }) => {
 
       <Row>
         <Col md={4}>
-          
-          <NewMessage onMessageSent={handleNewMessageSent} />
+          <div>
+            <label>Skriv ett inlägg:</label>
+            <br />
+            <input
+              type="text"
+              value={userPost}
+              onChange={(e) => setUserPost(e.target.value)}
+            />
+            <br />
+            <button type='button' onClick={onUserPost}>Skicka in</button>
 
-          <div className={styles.messages}>
-            <h2>Dina tidigare inlägg</h2>
-            {messages.map((message) => (
-              <div key={message.id} className={styles.messagesChat}>
-                <p>{message.text} <Button variant="link" onClick={() => deleteMessage(message.id)}>
-                  <FaTimes />
-                </Button></p>
-                
-              </div>
-            ))}
-          </div>
+
+            <div>
+              <h3>Meddelanden:</h3>
+              {messages.length > 0 ? (
+                    <ul>
+                    {messages.map((message, index) => (
+                      <li key={index}>
+                        {message.text} 
+                        <FaTimes 
+                          style={{ cursor: 'pointer', marginLeft: '10px', color: 'red' }} 
+                          onClick={() => deleteMessage(message.id)}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+              ) : (
+                <p>Inga meddelanden att visa</p>
+              )}
+            </div>
+          </div>       
         </Col>
 
+      
         <Col md={8}>
-
           <div className={styles.invites}>  
             <h2>Starta chat med vän</h2>
             <Form.Group className="mb-3">

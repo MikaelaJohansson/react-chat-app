@@ -17,38 +17,6 @@ const Profile = () => {
   const [avatarPreview, setAvatarPreview] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = sessionStorage.getItem('token');
-      const userId = sessionStorage.getItem('id');
-
-      if (!token || !userId) {
-        alert('User is not authenticated.');
-        navigate('/Login');
-        return;
-      }
-
-      try {
-        const response = await axios.get(`https://chatify-api.up.railway.app/users/${userId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        setUsername(response.data.username);
-        setEmail(response.data.email);
-        setAvatar(response.data.avatar);
-        setAvatarPreview(response.data.avatar);
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      }finally {
-        setLoading(false); 
-      }
-    };
-
-    fetchData();
-  }, [navigate]);
-
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
