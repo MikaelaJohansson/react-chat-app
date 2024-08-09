@@ -24,7 +24,7 @@ const Registration = () => {
       })
       .catch(error => {
         Sentry.captureException(error);
-        console.error(`[${new Date().toISOString()}] Fel vid hämtning av CSRF-token: User ${user}`, error);
+        console.error(`Fel vid hämtning av CSRF-token: User ${user}`, error);
       });
   }, []);
 
@@ -68,13 +68,7 @@ const Registration = () => {
             setError(errorMessage);
             Sentry.captureMessage(errorMessage, 'error');
           }
-        } else {
-          setError('Ett okänt fel inträffade.');
-          Sentry.captureMessage('Ett okänt fel inträffade.', 'error');
-        }
-      } else {
-        setError('Kunde inte ansluta till servern.');
-        Sentry.captureMessage('Kunde inte ansluta till servern.', 'error');
+        } 
       }
     }
   };

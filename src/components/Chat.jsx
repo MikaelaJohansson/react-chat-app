@@ -109,13 +109,14 @@ const Chat = () => {
   const handleInvite = async () => {
     if (userId.trim()) {
       const cryptoId = crypto.randomUUID();
-     
+      const username = user;
       const token = sessionStorage.getItem('token'); 
+      const loggedInUserId = sessionStorage.getItem('username');
      
       try {
         const response = await axios.post(`https://chatify-api.up.railway.app/invite/${userId}`, {
           conversationId: cryptoId,
-          username: user 
+          username: username 
         }, {
           headers: {
             'Content-Type': 'application/json',
@@ -126,13 +127,12 @@ const Chat = () => {
         console.log('Invitation sent successfully:', response.data);
         console.log(cryptoId,userId);
        
-        const newInvite = { username: userId, conversationId: cryptoId };
+        const newInvite = { username: userId, conversationId: cryptoId,sentBy: loggedInUserId };
         localStorage.setItem(`invite-${cryptoId}`, JSON.stringify(newInvite));
 
         setInviteList(prevList => [
           ...prevList,
           newInvite,
-          { username: user, conversationId: cryptoId }
         ]);
 
         setUserId('');
@@ -150,10 +150,12 @@ const Chat = () => {
 
   const loadInvitationsFromLocalStorage = () => {
     const keys = Object.keys(localStorage);
-    
+    const loggedInUserId = sessionStorage.getItem('username'); 
+
     const invites = keys
-      .filter(key => key.startsWith('invite-'))
-      .map(key => JSON.parse(localStorage.getItem(key)));
+    .filter(key => key.startsWith('invite-'))
+    .map(key => JSON.parse(localStorage.getItem(key)))
+    .filter(invite => invite.sentBy === loggedInUserId);
 
     setInviteList(invites);
   };

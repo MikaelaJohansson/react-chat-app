@@ -53,8 +53,6 @@ const Login = () => {
         sessionStorage.setItem('avatar', decoded.avatar);
         sessionStorage.setItem('id', decoded.id);
 
-        console.log('Decoded token:', decoded);
-
         navigate('/Chat');
       } else {
         Sentry.captureMessage('Failed to log in', 'error');

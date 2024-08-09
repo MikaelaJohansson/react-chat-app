@@ -7,6 +7,7 @@ import Profile from './components/Profile';
 import OffCanvas from './components/OffCanvas';
 import Home from './components/Home';
 import ProtectedRoute from './components/ProtectedRoute';
+import FriendChat from './components/FriendChat';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/chat" element={<Chat />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/offcanvas" element={<OffCanvas />} />
+          <Route path="/FriendChat" element={<FriendChat />} />
         </Route>
       </Routes>
     </Router>
