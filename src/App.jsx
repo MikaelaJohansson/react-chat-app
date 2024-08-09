@@ -5,28 +5,30 @@ import Login from './components/Login';
 import Chat from './components/Chat';
 import Profile from './components/Profile';
 import OffCanvas from './components/OffCanvas';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import FriendChat from './components/FriendChat';
+import Home from './components/Home';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
-        <Route path="/offcanvas" element={<OffCanvas />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/profile" element={<Profile />} />
         
-        <Route path="/friendChat" element={<FriendChat />} />
+        {/* Skyddade rutter */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/offcanvas" element={<OffCanvas />} />
+        </Route>
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
 
 
 

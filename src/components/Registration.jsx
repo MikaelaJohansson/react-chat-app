@@ -82,7 +82,9 @@ const Registration = () => {
 
   return (
     <Container className={styles['registration']}>
-      <h1 className={styles['registration-h1']}>Snackis</h1>
+      <h1 className={styles['registration-h1']} style={{ display: 'inline-flex', alignItems: 'center' }}>
+        <img src="/img/LogoMakr.png" alt="logo" style={{ width: '120px', marginRight: '10px' }} />
+        Snackis</h1>
       <section className={styles['registrationContainer']}>
         <h2>Skapa ett konto,</h2>
         <p>Det går snabbt och smidigt.</p>

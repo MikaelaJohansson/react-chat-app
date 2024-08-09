@@ -82,40 +82,44 @@ const Login = () => {
 
   return (
     <section className={styles['login-form']}>
-      <div className={styles['login-text']}>
-        <h1 className={styles['login-h1']}>Snackis</h1>
-        Logga in på ditt Snackis konto. <br />
-        Snackis hjälper dig att hålla kontakten 
-        med vänner.
-      </div>
-      <Form className={styles['login-border']}>
-        <Form.Group className="mb-3" controlId="formUsername">
-          <Form.Label>Användarnamn</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Användarnamn"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formPassword">
-          <Form.Label>Lösenord</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Lösenord"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <br />
-          <Button variant="success" type="button" style={{fontSize: "1.3rem", left:'3rem', position:'relative'}} onClick={handleLogin}>
-            Logga in
-          </Button>
-          <br />
-           <Link className={styles['login-link']} to="/registration">Har du inget konto?</Link>
-           {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
-        </Form.Group>
-      </Form>
-      <br /> 
+        <div className={styles['login-text']}>
+          <h1 className={styles['login-h1']} style={{ display: 'inline-flex', alignItems: 'center' }}>
+          <img src="/img/LogoMakr.png" alt="logo" style={{ width: '120px', marginRight: '10px' }} />
+          Snackis</h1>
+            <p>Logga in på ditt Snackis konto. <br />
+            Snackis hjälper dig att hålla kontakten 
+            med vänner.</p>
+            <Link to="/">Tillbaka</Link>
+        </div>
+        
+        <Form className={styles['login-border']}>
+          <Form.Group className="mb-3" controlId="formUsername">
+            <Form.Label>Användarnamn</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Användarnamn"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formPassword">
+            <Form.Label>Lösenord</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Lösenord"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <br />
+            <Button variant="success" type="button" style={{fontSize: "1.3rem", left:'3rem', position:'relative'}} onClick={handleLogin}>
+              Logga in
+            </Button>
+            <br />
+            <Link className={styles['login-link']} to="/registration">Har du inget konto?</Link>
+            {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+          </Form.Group>
+        </Form>
+        <br /> 
     </section>  
   );
 };

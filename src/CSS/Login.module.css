@@ -1,10 +1,5 @@
 /* Login.module.css */
-body{
-  justify-content: center; 
-  align-items: center; 
-  min-height: 100vh; 
-  width: 100%;
-}
+
 .login-h1{
   color: blue;
   font-weight: bolder;
@@ -22,10 +17,10 @@ body{
  
 }
 .login-border{
-  
   padding: 5rem;
   border-radius: 0.5rem;
-  
+  display: flex;
+  flex-direction: column;
   border-radius: 10px;
   box-shadow: 2px 3px 9px rgb(219, 219, 219);
   background-color: white;
@@ -38,10 +33,10 @@ body{
   padding: 2rem;
   display: flex;
   text-align: left;
-  flex-direction: row; 
+  margin-top: 5rem;
   justify-content: center; 
-  align-items: center; 
 }
+
 .login-link{
   font-size: 1.3rem;
   text-align: center;
