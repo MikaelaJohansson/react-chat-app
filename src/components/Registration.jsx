@@ -36,7 +36,7 @@ const Registration = () => {
           username: username,
           password: password,
           email: email,
-          avatar: 'https://i.pravatar.cc/200',
+          avatar: '/img/avatar.png',
           csrfToken
         }
       );
@@ -108,15 +108,6 @@ const Registration = () => {
               placeholder="E-postadress"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="formAvatar">
-            <Form.Label></Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Avatar URL"
-              value={avatar}
-              onChange={(e) => setAvatar(e.target.value)}
             />
           </Form.Group>
           <br />

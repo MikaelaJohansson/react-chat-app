@@ -196,7 +196,7 @@ const Chat = () => {
     <Container className={styles.container}>
       
       <header className={styles.header}>
-        <h1>Hej {user}!</h1>
+        <h1 className={styles.headerH1}>Hej {user}!</h1>
         <br />
         <img className={styles.headerImg} src={avatar} alt="User Avatar"   />    
         <OffCanvas user={user} avatar={avatar} />
@@ -213,7 +213,7 @@ const Chat = () => {
               onChange={(e) => setUserPost(e.target.value)}
             />
             <br />
-            <button  className={styles.button} type='button' onClick={onUserPost}>Skicka in</button>
+            <button  className={styles.button} type='button' variant="primary"  onClick={onUserPost}>Skicka in</button>
 
             <br />
             <div>
