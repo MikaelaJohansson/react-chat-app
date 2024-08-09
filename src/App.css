@@ -5,6 +5,10 @@
   text-align: center;
   background-color: rgb(244, 244, 244);
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 
 

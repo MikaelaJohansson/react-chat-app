@@ -82,7 +82,7 @@ const Login = () => {
     <section className={styles['login-form']}>
         <div className={styles['login-text']}>
           <h1 className={styles['login-h1']} style={{ display: 'inline-flex', alignItems: 'center' }}>
-          <img src="/img/LogoMakr.png" alt="logo" style={{ width: '120px', marginRight: '10px' }} />
+          <img src="/img/LogoMakr.png" alt="logo" style={{ width: '150px', marginRight: '10px' }} />
           Snackis</h1>
             <p>Logga in på ditt Snackis konto. <br />
             Snackis hjälper dig att hålla kontakten 
