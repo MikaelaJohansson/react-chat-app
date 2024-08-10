@@ -158,18 +158,18 @@ const Profile = () => {
             </Col>
           </Form.Group>
           {avatarPreview && (
-            <Form.Group as={Row} className="mb-3">
+            <Form.Group as={Row} className={styles.preview} >
               <Col sm={{ span: 10, offset: 2 }}>
                 <Image 
                   src={avatarPreview} 
                   alt="Avatar Preview" 
                   rounded 
-                  style={{ width: '100px', height: '100px' }} 
+                  style={{ width: '120px', height: '130px' }} 
                 />
               </Col>
             </Form.Group>
           )}
-          <Form.Group as={Row} className="mb-3">
+          <Form.Group as={Row} className={styles.preview}>
             <Col sm={{ span: 10, offset: 2 }}>
               <Button variant="primary" onClick={handleUpdate} className="me-2">Uppdatera profil</Button>
               <Button variant="danger" onClick={handleDelete}>Radera konto</Button>

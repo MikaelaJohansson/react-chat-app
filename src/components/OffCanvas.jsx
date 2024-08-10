@@ -17,7 +17,7 @@ const OffCanvas = ({ user, avatar }) => {
   };
 
   return (
-    <div >
+    <div className={styles.CanvasContainer}>
       <Button className={styles.CanvasButton} type="button" onClick={handleShow}>
         Profil
       </Button>
@@ -28,7 +28,7 @@ const OffCanvas = ({ user, avatar }) => {
           </Offcanvas.Header>
           <Offcanvas.Body style={{boxShadow:"2px 3px 9px lightgray", borderRadius:"0.3rem", backgroundColor:"white",display:"flex", flexDirection:"column", alignItems:"center"}} >
             <h1 style={{position:'relative', fontSize:'3rem', marginBottom:'1rem'}}>{user}</h1>
-            <img src={avatar} alt="Avatar" style={{borderRadius:'0.5rem', width:180, justifyContent:'center', boxShadow: '5px 3px 4px lightgray',backgroundColor: 'rgb(208, 240, 243)' }} />
+            <img src={avatar} alt="Avatar" style={{borderRadius:'0.5rem', width:140, justifyContent:'center', boxShadow: '5px 3px 4px lightgray',backgroundColor: 'rgb(208, 240, 243)' }} />
             <br />
             <Button variant="primary" type="button" style={{margin:"1rem", position:'relative', marginLeft:'3rem', fontSize:'1rem'}} onClick={handleLogout} >
               Logga ut
