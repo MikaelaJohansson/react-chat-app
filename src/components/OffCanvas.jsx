@@ -17,12 +17,12 @@ const OffCanvas = ({ user, avatar }) => {
   };
 
   return (
-    <div className={styles.CanvasContainer}>
+    <div >
       <Button className={styles.CanvasButton} type="button" onClick={handleShow}>
         Profil
       </Button>
       <div >
-        <Offcanvas show={show} onHide={handleClose} style={{padding:"3rem",backgroundColor:"rgb(236, 236, 236)" }}  >
+        <Offcanvas show={show} className={styles.CanvasContainer} onHide={handleClose} style={{padding:"3rem",backgroundColor:"rgb(236, 236, 236)" }}  >
           <Offcanvas.Header closeButton>
           <Offcanvas.Title style={{position:'relative', fontSize:'2rem' }}>Användare:</Offcanvas.Title>
           </Offcanvas.Header>

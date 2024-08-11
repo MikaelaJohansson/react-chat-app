@@ -76,7 +76,7 @@ const FriendChat = () => {
         }
       });
 
-      console.log('Message sent successfully:', response.data);
+      console.info('Message sent successfully:', response.data);
       setChatMessages(prevMessages => [...prevMessages, response.data.latestMessage]);
       setNewMessage(''); 
     } catch (error) {

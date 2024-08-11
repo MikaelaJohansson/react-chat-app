@@ -43,64 +43,83 @@ const Chat = () => {
     loadInvitationsFromLocalStorage();
   }, [conversations]);
   
-  const onUserPost = () => {
+    const onUserPost = () => {
     const token = sessionStorage.getItem('token');
+    if (!token) {
+        console.error('Token saknas i sessionStorage');
+        Sentry.captureMessage('Token saknas i sessionStorage', 'error');
+        return;
+    }
+
     const sanitizedUserPost = DOMPurify.sanitize(userPost);
 
     axios.post('https://chatify-api.up.railway.app/messages', {
-      text: sanitizedUserPost,
+        text: sanitizedUserPost,
     }, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
     })
     .then(response => {
-      console.log('Meddelande mottaget:', response.data);
-      setUserPost('');
-      fetchMessages();
+        console.info('Meddelande mottaget:', response.data);
+        setUserPost('');
+        fetchMessages();
     })
     .catch(error => {
-      console.error('Meddelande ej mottaget:', error);
+        console.error('Meddelande ej mottaget:', error);
+        Sentry.captureMessage('Fel vid postning av meddelande: ' + error.message, 'error');
     });
   };
 
-
   const fetchMessages = () => {
     const token = sessionStorage.getItem('token');
+    if (!token) {
+        console.error('Token saknas i sessionStorage');
+        Sentry.captureMessage('Token saknas i sessionStorage', 'error');
+        return;
+    }
 
     axios.get('https://chatify-api.up.railway.app/messages', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
     })
     .then(response => {
-      console.log('Användarens post hämtade:', response.data);
-      setMessages(response.data);
+        console.info('Användarens post hämtade:', response.data);
+        setMessages(response.data);
     })
     .catch(error => {
-      console.error('Fel vid hämtning av user posts:', error);
+        console.error('Fel vid hämtning av user posts:', error);
+        Sentry.captureMessage('Fel vid hämtning av meddelanden: ' + error.message, 'error');
     });
   };
 
   const deleteMessage = (id) => {
     const token = sessionStorage.getItem('token');
- 
+    if (!token) {
+        console.error('Token saknas i sessionStorage');
+        Sentry.captureMessage('Token saknas i sessionStorage', 'error');
+        return;
+    }
+
     axios.delete(`https://chatify-api.up.railway.app/messages/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
     })
     .then(response => {
-      console.log('Meddelande raderat:', response.data);
-      fetchMessages();
+        console.info('Meddelande raderat:', response.data);
+        fetchMessages();
     })
     .catch(error => {
-      console.error('Kunde ej radera meddelande:', error);
+        console.error('Kunde ej radera meddelande:', error);
+        Sentry.captureMessage('Fel vid radering av meddelande: ' + error.message, 'error');
     });
   };
+
 
 
 
@@ -137,10 +156,11 @@ const Chat = () => {
 
         setUserId('');
 
-        console.log('Invitation sent successfully:', response.data);
+        console.info('Invitation sent successfully:', response.data);
        
       } catch (error) {
         console.error('Error sending invitation:', error);
+        Sentry.captureMessage('Error sending invitation', 'error');
       }
     } else {
       alert('Please enter a valid user ID.');

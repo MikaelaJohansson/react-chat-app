@@ -42,7 +42,7 @@ const Registration = () => {
       );
   
       if (response.status === 201) {
-        console.log('Användare registrerades framgångsrikt');
+        console.info('Användare registrerades framgångsrikt');
         alert("Användare registrerades framgångsrikt")
         navigate('/login');
         setUsername('');
@@ -113,11 +113,8 @@ const Registration = () => {
           <br />
           <Form.Group className="mt-3">
             <p style={{ fontSize: "1rem" }}>
-              Genom att klicka på "Registrera konto" godkänner du våra villkor. Läs mer om hur vi samlar in,
-              använder och delar dina data i vår integritetspolicy och hur vi
-              använder cookies och liknande teknologi i vatikanen. Du kan
-              komma att få Email-aviseringar från oss och du kan välja bort detta
-              när som helst.
+              Genom att klicka på "Registrera konto" godkänner du våra villkor. 
+              Läs mer om hur vi samlar in, använder och delar din data i Vatikanen. 
             </p>
           </Form.Group>
           <Button variant="success" type="button" style={{ fontSize: "1.3rem" }} onClick={handleRegistration}>

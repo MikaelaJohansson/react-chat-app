@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link,useNavigation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Container, Form, Button, Col, Row, Image } from 'react-bootstrap';
@@ -116,7 +116,7 @@ const Profile = () => {
       alert('Your account has been successfully deleted.');
       sessionStorage.clear();
       localStorage.clear();
-      window.location.href = '/Login';
+      navigate('/Login');
     } catch (error) {
       console.error('Error deleting user account', error);
       Sentry.captureException(error); 

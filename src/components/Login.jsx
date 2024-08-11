@@ -19,7 +19,7 @@ const Login = () => {
     const fetchCsrfToken = async () => {
       try {
         const response = await axios.patch('https://chatify-api.up.railway.app/csrf');
-        console.log('CSRF token fetched successfully:', response.data.csrfToken);
+        console.info('CSRF token fetched successfully!');
         setCsrfToken(response.data.csrfToken);
       } catch (error) {
         Sentry.captureMessage('Error fetching CSRF token:', 'error');
