@@ -40,6 +40,9 @@ const Profile = () => {
 
     const apiUrl = 'https://api.imgbb.com/1/upload';
 
+    
+
+
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
