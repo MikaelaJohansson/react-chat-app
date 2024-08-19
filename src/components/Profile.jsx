@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, Link,useNavigation } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Container, Form, Button, Col, Row, Image } from 'react-bootstrap';
@@ -15,6 +15,7 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
   const [avatarPreview, setAvatarPreview] = useState('');
+  
   const navigate = useNavigate();
 
   useEffect(() => {

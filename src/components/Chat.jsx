@@ -13,16 +13,12 @@ import DOMPurify from 'dompurify';
 const Chat = () => {
   const [user, setUser] = useState('');
   const [avatar, setAvatar] = useState('');
-  
   const [conversationId, setConversationId] = useState('');
-  const [conversations, setConversations] = useState({});
   const [userId, setUserId] = useState('');
   const [inviteList, setInviteList] = useState([]);
   const [receivedInvites, setReceivedInvites] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
   const [selectedInvite, setSelectedInvite] = useState(null);
   const [selectedInvitation, setSelectedInvitation] = useState(null);
-
   const [userPost, setUserPost] = useState('');
   const [messages, setMessages] = useState([]);
 
@@ -41,7 +37,7 @@ const Chat = () => {
     
     fetchMessages();
     loadInvitationsFromLocalStorage();
-  }, [conversations]);
+  }, []);
   
   const onUserPost = async () => {
     const token = sessionStorage.getItem('token');
@@ -67,8 +63,8 @@ const Chat = () => {
       setUserPost('');
       await fetchMessages(); 
     } catch (error) {
-      console.error('Meddelande ej mottaget:', error);
-      Sentry.captureMessage('Fel vid postning av meddelande: ' + error.message, 'error');
+    console.error('Meddelande ej mottaget:', error);
+    Sentry.captureMessage('Fel vid postning av meddelande: ' + error.message, 'error');
   }
   };
 
@@ -106,18 +102,18 @@ const Chat = () => {
     }
 
     axios.delete(`https://chatify-api.up.railway.app/messages/${id}`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     })
     .then(response => {
-        console.info('Meddelande raderat:', response.data);
-        fetchMessages();
+      console.info('Meddelande raderat:', response.data);
+      fetchMessages();
     })
     .catch(error => {
-        console.error('Kunde ej radera meddelande:', error);
-        Sentry.captureMessage('Fel vid radering av meddelande: ' + error.message, 'error');
+      console.error('Kunde ej radera meddelande:', error);
+      Sentry.captureMessage('Fel vid radering av meddelande: ' + error.message, 'error');
     });
   };
 
@@ -211,17 +207,15 @@ const Chat = () => {
 
   return (
     <Container className={styles.container}>
-      
       <header className={styles.header}>
         <h1 className={styles.headerH1}>Hej {user}!</h1>
         <br />
-        <img className={styles.headerImg} src={avatar} alt="User Avatar"   />    
+        <img className={styles.headerImg} src={avatar} alt="User Avatar" />    
         <OffCanvas user={user} avatar={avatar} />
       </header>
-
       <Row>
         <Col md={4}>
-          <div  className={styles.messages}>
+          <div className={styles.messages}>
             <label>Skriv ett inlägg:</label>
             <br />
             <input
@@ -231,7 +225,6 @@ const Chat = () => {
             />
             <br />
             <button  className={styles.button} type='button' variant="primary"  onClick={onUserPost}>Skicka in</button>
-
             <br />
             <div>
               <h3>Meddelanden:</h3>
@@ -253,8 +246,6 @@ const Chat = () => {
             </div>
           </div>       
         </Col>
-
-      
         <Col md={8}>
           <div className={styles.invites}>  
             <h2>Starta chat med vän</h2>
@@ -281,23 +272,8 @@ const Chat = () => {
               ) : (
                 <p>Inga inbjudningar tillgängliga</p>
               )}
-            </ul>
-            
+            </ul>         
           </div>
-
-          {selectedInvite && (
-            <div>
-              <h2>Skicka ett medelande till {selectedInvite.username || selectedInvite.conversationId}</h2>
-              <Form.Control
-                type="text"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Skriv medelande..."
-              />
-              <Button onClick={sendMessageToInvite}>Skicka</Button>
-            </div>
-          )}
-
           <div className={styles.invites}>
             <h2>Hämta inbjudan från</h2>
             <Button onClick={retrieveInvitations}>Hämta</Button>

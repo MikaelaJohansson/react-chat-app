@@ -16,5 +16,6 @@
 .customListGroupItem{
   margin-bottom: 1rem;
   margin: 1rem;
- 
+  background-color:rgb(230, 242, 250);
+ border: 1px solid black;
 }

@@ -43,7 +43,7 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        console.log('Login successful:', response.data);
+        console.log('lyckad inloggning');
         const token = response.data.token;
         const decoded = jwtDecode(token);
 
@@ -88,8 +88,7 @@ const Login = () => {
             Snackis hjälper dig att hålla kontakten 
             med vänner.</p>
             <Link to="/">Tillbaka</Link>
-        </div>
-        
+        </div>       
         <Form className={styles['login-border']}>
           <Form.Group className="mb-3" controlId="formUsername">
             <Form.Label>Användarnamn</Form.Label>

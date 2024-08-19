@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Importera axios
+import axios from 'axios'; 
 import DOMPurify from 'dompurify';
 import styles from '../CSS/FriendChat.module.css';
 import { FaTimes } from 'react-icons/fa';
@@ -68,7 +68,7 @@ const FriendChat = () => {
       const response = await axios.post('https://chatify-api.up.railway.app/messages', 
       {
         text: sanitizedMessage,
-        conversationId: invite.conversationId
+        conversationId: invite.conversationId,
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -77,6 +77,7 @@ const FriendChat = () => {
       });
 
       console.info('Message sent successfully:', response.data);
+      console.log(response.data)
       setChatMessages(prevMessages => [...prevMessages, response.data.latestMessage]);
       setNewMessage(''); 
     } catch (error) {
@@ -89,15 +90,6 @@ const FriendChat = () => {
   useEffect(() => {
     fetchChatMessages();
   }, []);
-
-  const formatDate = (dateString) => {
-    console.log('Received date string:', dateString); 
-    const date = new Date(dateString);
-    if (date.toString() === 'Invalid Date') {
-      return 'Invalid Date';
-    }
-    return date.toLocaleString();
-  };
 
   const deleteChatItem = async (msgId) => {
     const token = sessionStorage.getItem('token');
@@ -128,13 +120,12 @@ const FriendChat = () => {
         <div>
           <h2>Chat med {invite.username || invite.conversationId}</h2>
           <ListGroup>
-            {chatMessages.length > 0 ? (
-              
-              chatMessages.map((msg) => (
-                <ListGroup.Item key={msg.id} className={styles.customListGroupItem}>
+            {chatMessages.length > 0 ? (             
+              chatMessages.map((msg,index) => (
+                <ListGroup.Item key={`${msg.id}-${index}`}  className={styles.customListGroupItem}>
                   <Row>
                     <Col xs={10}>
-                      {msg.text} <small>{formatDate(msg.createdAt)}</small> 
+                      {msg.text} 
                     </Col>
                     <Col xs={2} className="text-end">
                       <Button variant="danger" size="sm" onClick={() => deleteChatItem(msg.id)}>
@@ -142,10 +133,8 @@ const FriendChat = () => {
                       </Button>
                     </Col>
                   </Row>
-                </ListGroup.Item>
-                
-              ))
-              
+                </ListGroup.Item>               
+              ))              
             ) : (
               <p>Inga medelanden </p>
             )}
@@ -167,7 +156,7 @@ const FriendChat = () => {
         <p>No invite selected</p>
       )}
       <br />
-      <Link to="/Chat">Tillbaka till Chaten</Link>
+      <Link to="/Chat">Tillbaka till Chat</Link>
     </Container>
   );
 }
