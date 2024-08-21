@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <Container className={`text-center ${styles.textCenter}`}>
       <Row className="align-items-center">
-        <Col>
+        <Col xs={12}>
           <h1>
             <img 
               src="/img/LogoMakr.png" 
