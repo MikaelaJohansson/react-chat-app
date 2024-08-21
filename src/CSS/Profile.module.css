@@ -1,23 +1,13 @@
-.profilContainer{
-  margin-bottom: 3rem;
-  justify-content: center; 
-  align-items: center; 
-  align-content: center;
-  min-height: 100vh; 
-  min-width: fit-content;
-  display: flex;
-  flex-direction: column;
-}
+
 .profil{
  text-align: center;
- margin: 2rem;
- padding: 2rem;
+ padding: 3rem;
  border-radius: 0.3rem;
  background-color: white;
  box-shadow: 7px 7px 7px  #e3e2e2;
  font-size: 1.5rem;
  font-weight: 500;
- width: 100%;
+ 
 }
 .preview{
   padding: 1rem;
@@ -26,11 +16,7 @@
   align-items: center;
   align-content: center;
 }
-.link{
-  position: relative;
-  left: 2rem;
-  margin-top: 1rem;
-}
+
 
 
 

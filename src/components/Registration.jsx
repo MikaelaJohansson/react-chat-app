@@ -75,58 +75,68 @@ const Registration = () => {
   
 
   return (
-    <Container className={styles['registration']}>
+    <Container fluid className={styles.registration}>
+    <header className="text-center my-4">
       <h1 className={styles['registration-h1']} style={{ display: 'inline-flex', alignItems: 'center' }}>
-        <img src="/img/LogoMakr.png" alt="logo" style={{ width: '150px', marginRight: '10px' }} />
-        Snackis</h1>
-      <section className={styles['registrationContainer']}>
-        <h2>Skapa ett konto,</h2>
-        <p>Det går snabbt och smidigt.</p>
-        <Form>
-          <Form.Group controlId="formUsername">
-            <Form.Label></Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Användarnamn"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="formPassword">
-            <Form.Label></Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Lösenord"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="formEmail">
-            <Form.Label></Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="E-postadress"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
-          <br />
-          <Form.Group className="mt-3">
-            <p style={{ fontSize: "1rem" }}>
-              Genom att klicka på "Registrera konto" godkänner du våra villkor. 
-              Läs mer om hur vi samlar in, använder och delar din data i Vatikanen. 
-            </p>
-          </Form.Group>
-          <Button variant="success" type="button" style={{ fontSize: "1.3rem" }} onClick={handleRegistration}>
-            Registrera konto
-          </Button>
-          <Form.Group className="mt-3">
-            <Link style={{ fontSize: "1.5rem" }} to="/login">Har du redan ett konto?</Link>
-          </Form.Group>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-        </Form>
-      </section>
-    </Container>
+        <img
+          src="/img/LogoMakr.png"
+          alt="logo"
+          style={{ width: '150px', marginRight: '10px' }}
+          className="img-fluid"
+        />
+        Snackis
+      </h1>
+    </header>
+    <section className={styles.registrationContainer}>
+      <h2 className="text-center">Skapa ett konto,</h2>
+      <p className="text-center">Det går snabbt och smidigt.</p>
+      <Form>
+        <Form.Group controlId="formUsername" className="mb-3">
+          <Form.Label className="d-none">Användarnamn</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Användarnamn"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="form-control-lg"
+          />
+        </Form.Group>
+        <Form.Group controlId="formPassword" className="mb-3">
+          <Form.Label className="d-none">Lösenord</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Lösenord"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="form-control-lg"
+          />
+        </Form.Group>
+        <Form.Group controlId="formEmail" className="mb-4">
+          <Form.Label className="d-none">E-postadress</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="E-postadress"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="form-control-lg"
+          />
+        </Form.Group>
+        <Form.Group className="mt-3">
+          <p style={{ fontSize: '1rem' }}>
+            Genom att klicka på "Registrera konto" godkänner du våra villkor.
+            Läs mer om hur vi samlar in, använder och delar din data i Vatikanen.
+          </p>
+        </Form.Group>
+        <Button variant="success" type="button" className="w-100 py-2" style={{ fontSize: '1.3rem' }} onClick={handleRegistration}>
+          Registrera konto
+        </Button>
+        <Form.Group className="mt-4 text-center">
+          <Link style={{ fontSize: '1.5rem' }} to="/login">Har du redan ett konto?</Link>
+        </Form.Group>
+        {error && <p className="text-center text-danger mt-3">{error}</p>}
+      </Form>
+    </section>
+  </Container>
   );
 };
 

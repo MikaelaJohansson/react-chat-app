@@ -128,62 +128,64 @@ const Profile = () => {
   };
 
   return (
-    <div className={styles.profilContainer}>
-      <Container className={styles.profil} >
-      <h2 className="my-4">Uppdatera din Profil, {username}</h2>
-        <Form>
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm="2">User</Form.Label>
-            <Col sm="10">
-              <Form.Control 
-                type="text" 
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
+    <div className={`${styles.profilContainer} py-4`}>
+    <Container className={styles.profil}>
+      <h2 className="text-center mb-4">Uppdatera din Profil, {username}</h2>
+      <Form>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={12} md={3} >Namn</Form.Label>
+          <Col sm={12} md={9}>
+            <Form.Control 
+              type="text" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={12} md={3}>E-post</Form.Label>
+          <Col sm={12} md={9}>
+            <Form.Control 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={12} md={3}>Avatar</Form.Label>
+          <Col sm={12} md={9}>
+            <Form.Control 
+              type="file" 
+              onChange={handleFileChange} 
+            />
+          </Col>
+        </Form.Group>
+        {avatarPreview && (
+          <Form.Group as={Row} className="mb-4">
+            <Col sm={{ span: 12, offset: 0 }} className="text-center">
+              <Image 
+                src={avatarPreview} 
+                alt="Avatar Preview" 
+                rounded 
+                style={{ width: '150px' }} 
               />
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm="2">Email</Form.Label>
-            <Col sm="10">
-              <Form.Control 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-              />
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm="2">Avatar</Form.Label>
-            <Col sm="10">
-              <Form.Control 
-                type="file" 
-                onChange={handleFileChange} 
-              />
-            </Col>
-          </Form.Group>
-          {avatarPreview && (
-            <Form.Group as={Row} className={styles.preview} >
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Image 
-                  src={avatarPreview} 
-                  alt="Avatar Preview" 
-                  rounded 
-                  style={{ width: '120px', height: '130px' }} 
-                />
-              </Col>
-            </Form.Group>
-          )}
-          <Form.Group as={Row} className={styles.preview}>
-            <Col sm={{ span: 10, offset: 2 }}>
-              <Button variant="primary" onClick={handleUpdate} className="me-2">Uppdatera profil</Button>
-              <Button variant="danger" onClick={handleDelete}>Radera konto</Button>
-            </Col>
-          </Form.Group>
-        </Form>
-        <Link to="/Chat" className={styles.link} >Tillbaka till Chat</Link>
-        <ToastContainer />
-      </Container>
-    </div>  
+        )}
+        <Form.Group as={Row} className="mb-4">
+          <Col sm={{ span: 12, offset: 0 }} className="text-center">
+            <Button variant="primary" onClick={handleUpdate} className="me-2">Uppdatera profil</Button>
+            <Button variant="danger" onClick={handleDelete}>Radera konto</Button>
+          </Col>
+        </Form.Group>
+      </Form>
+      <div className="text-center mt-4">
+        <Link to="/Chat" className={styles.link}>Tillbaka till Chat</Link>
+      </div>
+      <ToastContainer />
+    </Container>
+  </div>
   );
 };
 
