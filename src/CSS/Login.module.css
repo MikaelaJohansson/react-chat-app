@@ -122,7 +122,8 @@ body {
 
 @media (max-width: 600px) {
   .login-form {
-    margin-right: 5rem;
+    position: relative;
+    top: -3rem;
     flex-direction: column;
     padding: 10px; 
   }

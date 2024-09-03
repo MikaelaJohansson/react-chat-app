@@ -17,7 +17,7 @@ const Home = () => {
             />
             Välkommen till Snackis!
           </h1>
-          <p>
+          <p className={styles.homeText}>
             På Snackis har vi skapat en plattform där du kan dela tankar och idéer, 
             och ha meningsfulla konversationer. Oavsett om du vill diskutera politik 
             eller bara småprata om vardagen, så är Snackis det perfekta stället för dig.
