@@ -1,9 +1,9 @@
-.button{
+.button {
   color: white;
   background-color: rgb(61, 85, 242);
 }
 
-.header{
+.header {
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
@@ -15,36 +15,49 @@
   background-repeat: no-repeat; 
 }
 
-.headerImg{
- border-radius: 0.3rem; 
- width: 300px; 
- padding: 1rem;
- background-color: rgb(208, 240, 243);
- border:3px solid white;
+.headerImg {
+  border-radius: 0.3rem; 
+  width: 200px;
+  padding: 1rem;
+  background-color: rgb(208, 240, 243);
+  border: 3px solid white;
 }
-.messages{
-  background-color:white;
-  margin-top: 7rem;
+
+.messages {
+  background-color: white;
   box-shadow: 2px 3px 9px rgb(219, 219, 219);
   border-radius: 0.3rem;
   padding: 3rem;
   text-align: left;
   font-size: 1.3rem; 
+  margin-top: 3rem;
 }
-.messagesChat{
-  background-color:rgb(230, 242, 250);
-  margin-top: 2rem;
+
+.messagesChat {
+  background-color: rgb(230, 242, 250);
+  margin-top: 1rem;
   border: 1px solid black;
-  border-radius: 0.4rem;
+  border-radius: 0.4rem; /* Ta bort dubbletter */
   width: fit-content;
   font-size: 1.3rem;
   padding: 0.3rem;
-  border-radius: 0.4rem;
 }
-.invites{
-  background-color:white;
+
+.invites {
+  background-color: white;
   margin-top: 7rem;
   padding: 1.8rem;
   box-shadow: 2px 3px 9px rgb(219, 219, 219);
   border-radius: 0.4rem;
+}
+
+.chatButton {
+  margin-top: 2rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,14 +1,14 @@
 #root {
-  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
   background-color: rgb(244, 244, 244);
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   align-content: center;
+  width: 100%;
+  min-height: 100vh;
 }
 
 

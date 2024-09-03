@@ -206,100 +206,100 @@ const Chat = () => {
   };
 
   return (
-    <Container fluid className={styles.container}>
-    <header className={styles.header}>
-      <h1 className={`${styles.headerH1} text-center`}>Hej {user}!</h1>
-      <div className="text-center my-3">
-        <img className={`${styles.headerImg} img-fluid`}  src={avatar} alt="User Avatar" />
-      </div>
-      <OffCanvas user={user} avatar={avatar} />
-    </header>
-    <Row>
-      <Col xs={12} md={4} className="mb-4">
-        <div className={styles.messages}>
-          <label htmlFor="userPost">Skriv ett inlägg:</label>
-          <input
-            id="userPost"
-            className="form-control my-2"
-            type="text"
-            value={userPost}
-            onChange={(e) => setUserPost(e.target.value)}
-          />
-          <Button className={`${styles.button} w-100`} variant="primary" onClick={onUserPost}>
-            Skicka in
-          </Button>
-          <div className="mt-4">
-            <h3>Meddelanden:</h3>
-            {messages.length > 0 ? (
-              <ul className="list-unstyled">
-                {messages.map((message, index) => (
-                  <li key={index} className={`${styles.messagesChat} d-flex align-items-center`}>
-                    {message.text}
-                    <FaTimes
-                      className="ms-2 text-danger"
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => deleteMessage(message.id)}
-                    />
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>Inga meddelanden att visa</p>
-            )}
-          </div>
+    <Container fluid >
+      <header className={styles.header}>
+        <h1 className={`${styles.headerH1} text-center`}>Hej {user}!</h1>
+        <div className="text-center my-3">
+          <img className={`${styles.headerImg} img-fluid`}  src={avatar} alt="User Avatar" />
         </div>
-      </Col>
-      <Col xs={12} md={8}>
-        <div className={styles.invites}>
-          <h2>Starta chat med vän</h2>
-          <Form.Group className="mb-3">
-            <Form.Control
+        <OffCanvas user={user} avatar={avatar} />
+      </header>
+      <Row className={styles.container}>
+        <Col xs={12} md={4} className="mb-4">
+          <div className={styles.messages}>
+            <label htmlFor="userPost">Skriv ett inlägg:</label>
+            <input
+              id="userPost"
+              className="form-control my-2"
               type="text"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              placeholder="Ange användar ID"
+              value={userPost}
+              onChange={(e) => setUserPost(e.target.value)}
             />
-            <Button className="w-100 mt-3" onClick={handleInvite}>
-              Bjud in vän
+            <Button  className={styles.chatButton1}  variant="primary" onClick={onUserPost}>
+              Skicka in
             </Button>
-          </Form.Group>
-          <h2>Dina chattar</h2>
-          <ul className="list-unstyled">
-            {Array.isArray(inviteList) && inviteList.length > 0 ? (
-              inviteList.map((invite, index) => (
-                <li key={index}>
-                  <Button variant="link" className="p-0" onClick={() => handleInviteSelect(invite)}>
-                    {invite.username || invite.conversationId}
-                  </Button>
-                </li>
-              ))
-            ) : (
-              <p>Inga inbjudningar tillgängliga</p>
-            )}
-          </ul>
-        </div>
-        <div className={`${styles.invites} mt-4`}>
-          <h2>Hämta inbjudan från</h2>
-          <Button className="w-100" onClick={retrieveInvitations}>
-            Hämta
-          </Button>
-          <ul className="list-unstyled mt-3">
-            {Array.isArray(receivedInvites) && receivedInvites.length > 0 ? (
-              receivedInvites.map((invitation, idx) => (
-                <li key={idx}>
-                  <Button variant="link" className="p-0" onClick={() => handleInvitationSelect(invitation)}>
-                    {invitation.username || invitation.convoId}
-                  </Button>
-                </li>
-              ))
-            ) : (
-              <p>Inga inbjudningar tillgängliga</p>
-            )}
-          </ul>
-        </div>
-      </Col>
-    </Row>
-  </Container>
+            <div className="mt-4">
+              <h3>Meddelanden:</h3>
+              {messages.length > 0 ? (
+                <ul className="list-unstyled">
+                  {messages.map((message, index) => (
+                    <li key={index} className={`${styles.messagesChat} d-flex align-items-center`}>
+                      {message.text}
+                      <FaTimes
+                        className="ms-2 text-danger"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => deleteMessage(message.id)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Inga meddelanden att visa</p>
+              )}
+            </div>
+          </div>
+        </Col>
+        <Col xs={12} md={4}>
+          <div className={styles.invites}>
+            <h2>Starta chat med vän</h2>
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                placeholder="Ange användar ID"
+              />
+              <Button  className={styles.chatButton} onClick={handleInvite}>
+                Bjud in vän
+              </Button>
+            </Form.Group>
+            <h2>Dina chattar</h2>
+            <ul className="list-unstyled">
+              {Array.isArray(inviteList) && inviteList.length > 0 ? (
+                inviteList.map((invite, index) => (
+                  <li key={index}>
+                    <Button variant="link" className="p-0" onClick={() => handleInviteSelect(invite)}>
+                      {invite.username || invite.conversationId}
+                    </Button>
+                  </li>
+                ))
+              ) : (
+                <p>Inga inbjudningar tillgängliga</p>
+              )}
+            </ul>
+          </div>
+          <div className={`${styles.invites} mt-4`}>
+            <h2>Hämta inbjudan från</h2>
+            <Button  className={styles.chatButton}  onClick={retrieveInvitations}>
+              Hämta
+            </Button>
+            <ul className="list-unstyled mt-3">
+              {Array.isArray(receivedInvites) && receivedInvites.length > 0 ? (
+                receivedInvites.map((invitation, idx) => (
+                  <li key={idx}>
+                    <Button variant="link" className="p-0" onClick={() => handleInvitationSelect(invitation)}>
+                      {invitation.username || invitation.convoId}
+                    </Button>
+                  </li>
+                ))
+              ) : (
+                <p>Inga inbjudningar tillgängliga</p>
+              )}
+            </ul>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

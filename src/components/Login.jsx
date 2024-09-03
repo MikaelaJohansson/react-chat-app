@@ -2,12 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
-import Form from 'react-bootstrap/Form';
-import Alert from 'react-bootstrap/Alert';
 import styles from '../CSS/Login.module.css';
-import Button from 'react-bootstrap/Button';
 import * as Sentry from "@sentry/react";
-
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -81,53 +77,58 @@ const Login = () => {
 
   return (
     <section className={styles['login-form']}>
-    <div className={`${styles['login-text']} text-center mb-4`}>
-      <h1 className={styles['login-h1']} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-        <img src="/img/LogoMakr.png" alt="logo" className="img-fluid" style={{ width: '150px', marginRight: '10px' }} />
-        Snackis
-      </h1>
-      <p>Logga in på ditt Snackis konto. <br />
-        Snackis hjälper dig att hålla kontakten med vänner.
-      </p>
-      <Link to="/">Tillbaka</Link>
-    </div>
-    <Form className={`${styles['login-border']} mx-auto`} style={{ maxWidth: '400px' }}>
-      <Form.Group className="mb-3" controlId="formUsername">
-        <Form.Label>Användarnamn</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Användarnamn"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="form-control-lg"
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formPassword">
-        <Form.Label>Lösenord</Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Lösenord"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="form-control-lg"
-        />
-      </Form.Group>
-      <div className="text-center">
-        <Button variant="success" type="button" className="w-100 py-2" style={{ fontSize: '1.3rem' }} onClick={handleLogin}>
-          Logga in
-        </Button>
+      <div className={`${styles['login-text']} text-center mb-4`}>
+        <h1 className={styles['login-h1']}>
+          <img src="/img/LogoMakr.png" alt="logo" className={styles['login-logo']} />
+          Snackis
+        </h1>
+        <p>Logga in på ditt Snackis konto. <br />
+          Snackis hjälper dig att hålla kontakten med vänner.
+        </p>
+        <Link to="/">Tillbaka</Link>
       </div>
-      <div className="text-center mt-3">
-        <Link className={styles['login-link']} to="/registration">Har du inget konto?</Link>
-      </div>
-      {error && <Alert variant="danger" className="mt-3 text-center">{error}</Alert>}
-    </Form>
-    <br />
-  </section>
+      <form className={`${styles['login-border']} mx-auto ${styles['login-form-container']}`}>
+        <div className="mb-3">
+          <label htmlFor="formUsername">Användarnamn</label>
+           <br />
+          <input
+            type="text"
+            id="formUsername"
+            placeholder="Användarnamn"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className={styles['form-control-sm']}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="formPassword">Lösenord</label>
+          <br />
+          <input
+            type="password"
+            id="formPassword"
+            placeholder="Lösenord"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={styles['form-control-sm']}
+          />
+        </div>
+        <div className="text-center">
+          <button type="button" className={styles['login-button']} onClick={handleLogin}>
+            Logga in
+          </button>
+        </div>
+        <div className="text-center mt-3">
+          <Link className={styles['login-link']} to="/registration">Har du inget konto?</Link>
+        </div>
+        {error && <div className={`${styles['alert']} mt-3 text-center`}>{error}</div>}
+      </form>
+      <br />
+    </section>
   );
 };
 
 export default Login;
+
 
 
 

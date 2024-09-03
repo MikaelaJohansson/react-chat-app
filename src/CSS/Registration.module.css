@@ -1,32 +1,31 @@
 .registration{
   justify-content: center; 
   align-items: center; 
-  min-height: 100vh; 
-  width: 100%;
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  align-items: center;
-  margin: auto;
 }
-
 
 .registrationContainer{
   background-color: white;
-  padding: 4rem;
+  padding: 2rem;
   text-align: center;
   border-radius: 0.5rem;
   font-weight: 400;
   color: rgb(85, 84, 84);
-  font-size: 2rem;
+  font-size: 1.2rem;
   box-shadow: 10px 10px 10px  #dad9d9;
-  border: 2px solid #c7c7c7;
+  border: 1.4px solid #4d4d4d;
   width: fit-content;
 }
 .registration-h1{
   margin-top: 1rem;
   color: blue;
   font-weight: bolder;
-  font-size: 4.6rem;
+  font-size: 4rem;
+}
+.registrationButton{
+  background-color: rgb(78, 78, 255);
+  box-shadow: 1px 2px 3px gray;
+  font-size: 1rem;
 }
 

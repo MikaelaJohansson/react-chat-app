@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../CSS/Registration.module.css';
-import Button from 'react-bootstrap/Button';
 import * as Sentry from "@sentry/react";
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-
 
 const Registration = () => {
   const [username, setUsername] = useState('');
@@ -75,13 +71,13 @@ const Registration = () => {
   
 
   return (
-    <Container fluid className={styles.registration}>
-      <header className="text-center my-4">
-        <h1 className={styles['registration-h1']} style={{ display: 'inline-flex', alignItems: 'center' }}>
+    <div className={styles.registration}>
+      <header>
+        <h1  className={styles['registration-h1']}>
           <img
             src="/img/LogoMakr.png"
             alt="logo"
-            style={{ width: '150px', marginRight: '10px' }}
+            style={{ width: '120px' }}
             className="img-fluid"
           />
           Snackis
@@ -90,57 +86,55 @@ const Registration = () => {
       <section className={styles.registrationContainer}>
         <h2 className="text-center">Skapa ett konto,</h2>
         <p className="text-center">Det går snabbt och smidigt.</p>
-        <Form>
-          <Form.Group controlId="formUsername" className="mb-3">
-            <Form.Label className="d-none">Användarnamn</Form.Label>
-            <Form.Control
+        <form>
+          <div className="mb-3">
+            <input
               type="text"
               placeholder="Användarnamn"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="form-control-lg"
+              className="form-control-sm"
             />
-          </Form.Group>
-          <Form.Group controlId="formPassword" className="mb-3">
-            <Form.Label className="d-none">Lösenord</Form.Label>
-            <Form.Control
+          </div>
+          <div className="mb-3">
+            <input
               type="password"
               placeholder="Lösenord"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="form-control-lg"
+              className="form-control-sm"
             />
-          </Form.Group>
-          <Form.Group controlId="formEmail" className="mb-4">
-            <Form.Label className="d-none">E-postadress</Form.Label>
-            <Form.Control
+          </div>
+          <div className="mb-4">
+            <input
               type="email"
               placeholder="E-postadress"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="form-control-lg"
+              className="form-control-sm"
             />
-          </Form.Group>
-          <Form.Group className="mt-3">
+          </div>
+          <div className="mt-3">
             <p style={{ fontSize: '1rem' }}>
-              Genom att klicka på "Registrera konto" godkänner du våra villkor.
+              Genom att klicka på "Registrera konto" godkänner du våra villkor. <br />
               Läs mer om hur vi samlar in, använder och delar din data i Vatikanen.
             </p>
-          </Form.Group>
-          <Button variant="success" type="button" className="w-100 py-2" style={{ fontSize: '1.3rem' }} onClick={handleRegistration}>
+          </div>
+          <button  className={styles.registrationButton} type="button" onClick={handleRegistration}>
             Registrera konto
-          </Button>
-          <Form.Group className="mt-4 text-center">
-            <Link style={{ fontSize: '1.5rem' }} to="/login">Har du redan ett konto?</Link>
-          </Form.Group>
+          </button>
+          <div className="mt-4 text-center">
+            <Link style={{ fontSize: '1.2rem' }} to="/login">Har du redan ett konto?</Link>
+          </div>
           {error && <p className="text-center text-danger mt-3">{error}</p>}
-        </Form>
+        </form>
       </section>
-    </Container>
+    </div>
   );
 };
 
 export default Registration;
+
 
 
 

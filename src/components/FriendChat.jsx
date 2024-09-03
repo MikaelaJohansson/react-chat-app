@@ -116,51 +116,51 @@ const FriendChat = () => {
 
   return (
     <Container className={`${styles.FriendContainer} my-4`}>
-    {invite ? (
-      <div>
-        <h2 className="text-center mb-4">Chat med {invite.username || invite.conversationId}</h2>
-        <ListGroup className="mb-4">
-          {chatMessages.length > 0 ? (
-            chatMessages.map((msg, index) => (
-              <ListGroup.Item key={`${msg.id}-${index}`} className={`${styles.customListGroupItem} mb-2`}>
-                <Row className="align-items-center">
-                  <Col xs={10}>
-                    {msg.text}
-                  </Col>
-                  <Col xs={2} className="text-end">
-                    <Button variant="danger" size="sm" onClick={() => deleteChatItem(msg.id)}>
-                      <FaTimes />
-                    </Button>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-            ))
-          ) : (
-            <p className="text-center">Inga meddelanden</p>
-          )}
-        </ListGroup>
-        <Form className={styles.friendChatSend}>
-          <Form.Group controlId="messageInput">
-            <Form.Control
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Skriv meddelanden..."
-              className="form-control-lg"
-            />
-          </Form.Group>
-          <Button className="mt-3 w-100" onClick={sendMessage}>
-            Skicka
-          </Button>
-        </Form>
+      {invite ? (
+        <div>
+          <h2 className="text-center mb-4">Chat med {invite.username || invite.conversationId}</h2>
+          <ListGroup className="mb-4">
+            {chatMessages.length > 0 ? (
+              chatMessages.map((msg, index) => (
+                <ListGroup.Item key={`${msg.id}-${index}`} className={`${styles.customListGroupItem} mb-2`}>
+                  <Row className="align-items-center">
+                    <Col xs={10}>
+                      {msg.text}
+                    </Col>
+                    <Col xs={2} className="text-end">
+                      <Button variant="danger" size="sm" onClick={() => deleteChatItem(msg.id)}>
+                        <FaTimes />
+                      </Button>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+              ))
+            ) : (
+              <p className="text-center">Inga meddelanden</p>
+            )}
+          </ListGroup>
+          <Form className={styles.friendChatSend}>
+            <Form.Group controlId="messageInput">
+              <Form.Control
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Skriv meddelanden..."
+                className="form-control-"
+              />
+            </Form.Group>
+            <Button className="mt-3 " onClick={sendMessage}>
+              Skicka
+            </Button>
+          </Form>
+        </div>
+      ) : (
+        <p className="text-center">No invite selected</p>
+      )}
+      <div className="text-center mt-4">
+        <Link to="/Chat">Tillbaka till Chat</Link>
       </div>
-    ) : (
-      <p className="text-center">No invite selected</p>
-    )}
-    <div className="text-center mt-4">
-      <Link to="/Chat">Tillbaka till Chat</Link>
-    </div>
-  </Container>
+    </Container>
   );
 }
 
