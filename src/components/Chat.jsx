@@ -35,6 +35,7 @@ const Chat = () => {
       setConversationId(messageId);
     }
     
+    retrieveInvitations();
     fetchMessages();
     loadInvitationsFromLocalStorage();
   }, []);
