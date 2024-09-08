@@ -54,7 +54,7 @@ const Registration = () => {
       if (error.response) {
         if (error.response.status === 400) {
           const errorMessage = error.response.data.error;
-          if (errorMessage.includes('Username or email already exists')) {
+          if (errorMessage.includes('Användarnamn eller e-postadress finns redan.')) {
             setError('Användarnamn eller e-post finns redan.');
             Sentry.captureMessage('Användarnamn eller e-post finns redan.', 'error');
           } else if (errorMessage.includes('username')) {

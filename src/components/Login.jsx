@@ -19,9 +19,9 @@ const Login = () => {
         console.info('CSRF token fetched successfully!');
         setCsrfToken(response.data.csrfToken);
       } catch (error) {
-        Sentry.captureMessage('Error fetching CSRF token:', 'error');
-        console.error('Error fetching CSRF token:', error);
-        setError('Failed to fetch CSRF token. Please try again later.');
+        Sentry.captureMessage('Fel vid hämtning av CSRF-token:', 'error');
+        console.error('EFel vid hämtning av CSRF-token:', error);
+        setError('Misslyckades med att hämta CSRF-token. Vänligen försök igen senare.');
       }
     };
 
@@ -52,25 +52,25 @@ const Login = () => {
 
         navigate('/Chat');
       } else {
-        Sentry.captureMessage('Failed to log in', 'error');
-        console.error('Failed to log in:', response);
-        throw new Error('Failed to log in');
+        Sentry.captureMessage('Misslyckades med att logga in', 'error');
+        console.error('Misslyckades med att logga in:', response);
+        throw new Error('Misslyckades med att logga in');
       }
     } catch (error) {
       if (error.response) {
         if (error.response.status === 401) {
-          Sentry.captureMessage('Invalid credentials', 'error');
-          console.error('Invalid credentials:', error.response);
-          setError('Invalid credentials.');
+          Sentry.captureMessage('Ogiltiga referenser', 'error');
+          console.error('Ogiltiga referenser:', error.response);
+          setError('Ogiltiga referenser.');
         } else {
-          Sentry.captureMessage('Login failed. Please try again later.', 'error');
-          console.error('Login failed:', error.response);
-          setError('Login failed. Please try again later.');
+          Sentry.captureMessage('Inloggning misslyckades. Vänligen försök igen senare.', 'error');
+          console.error('Inloggning misslyckades:', error.response);
+          setError('Inloggning misslyckades. Vänligen försök igen senare.');
         }
       } else {
-        Sentry.captureMessage('Unexpected error during login', 'error');
-        console.error('Unexpected error during login:', error);
-        setError('Unexpected error occurred. Please try again later.');
+        Sentry.captureMessage('Oväntat fel vid inloggning', 'error');
+        console.error('Oväntat fel vid inloggning:', error);
+        setError('Oväntat fel inträffade. Vänligen försök igen senare.');
       }
     }
   };

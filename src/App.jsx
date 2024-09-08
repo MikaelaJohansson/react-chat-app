@@ -8,6 +8,8 @@ import OffCanvas from './components/OffCanvas';
 import Home from './components/Home';
 import ProtectedRoute from './components/ProtectedRoute';
 import FriendChat from './components/FriendChat';
+import NotFound from './components/NotFound';
+
 
 function App() {
   return (
@@ -17,19 +19,21 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         
-        {/* Skyddade rutter */}
         <Route element={<ProtectedRoute />}>
           <Route path="/chat" element={<Chat />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/offcanvas" element={<OffCanvas />} />
           <Route path="/FriendChat" element={<FriendChat />} />
         </Route>
+        
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
 
 
 

@@ -18,14 +18,14 @@ const FriendChat = () => {
   const fetchChatMessages = async () => {
     const token = sessionStorage.getItem('token');
     if (!token) {
-      console.error('No token found in session storage.');
+      console.error('Ingen token hittades i sessionslagringen.');
       return;
     }
 
     try {
       
       if (!invite || !invite.conversationId) {
-        console.error('No invite or conversationId available.');
+        console.error('Ingen inbjudan eller conversationId tillgänglig.');
         return;
       }
 
@@ -42,28 +42,28 @@ const FriendChat = () => {
     
       setChatMessages(response.data);
     } catch (error) {
-      console.error('Error fetching chat messages:', error);
+      console.error('Fel vid hämtning av chattmeddelanden:', error);
     }
   };
 
   const sendMessage = async () => {
     const token = sessionStorage.getItem('token');
     if (!token) {
-      console.error('No token found in session storage.');
+      console.error('Ingen token hittades i sessionslagringen.');
       return;
     }
 
     try {
       if (!invite || !invite.conversationId) {
-        console.error('No invite or conversationId available.');
+        console.error('Ingen inbjudan eller conversationId tillgänglig.');
         return;
       }
       
-      console.log('Original message:', newMessage); 
+      console.log('Ursprungligt meddelande:', newMessage); 
 
       const sanitizedMessage = DOMPurify.sanitize(newMessage); 
 
-      console.log('Sanitized message:', sanitizedMessage);
+      console.log('Rensat meddelande:', sanitizedMessage);
 
       const response = await axios.post('https://chatify-api.up.railway.app/messages', 
       {
@@ -76,13 +76,13 @@ const FriendChat = () => {
         }
       });
 
-      console.info('Message sent successfully:', response.data);
+      console.info('Meddelande skickat framgångsrikt:', response.data);
       console.log(response.data)
       setChatMessages(prevMessages => [...prevMessages, response.data.latestMessage]);
       setNewMessage(''); 
     } catch (error) {
-      Sentry.captureMessage('Error sending message:', 'error');
-      console.error('Error sending message:', error);
+      Sentry.captureMessage('Fel vid sändning av meddelande.', 'error');
+      console.error('Fel vid sändning av meddelande:', error);
     }
   };
 
@@ -94,7 +94,7 @@ const FriendChat = () => {
   const deleteChatItem = async (msgId) => {
     const token = sessionStorage.getItem('token');
     if (!token) {
-      console.error('No token found in session storage.');
+      console.error('Ingen token hittades i sessionslagringen.');
       return;
     }
 
@@ -107,10 +107,10 @@ const FriendChat = () => {
       });
 
       setChatMessages(prevMessages => prevMessages.filter(msg => msg.id !== msgId));
-      alert('Message has been deleted');
+      alert('Meddelandet har raderats.');
     } catch (error) {
-      console.error('Error deleting chat item:', error);
-      Sentry.captureMessage('Error deleting chat item:', 'error');
+      console.error('Fel vid radering av chattobjekt:', error);
+      Sentry.captureMessage('Fel vid radering av chattobjekt:', 'error');
     }
   };
 
@@ -155,7 +155,7 @@ const FriendChat = () => {
           </Form>
         </div>
       ) : (
-        <p className="text-center">No invite selected</p>
+        <p className="text-center">Ingen inbjudan vald.</p>
       )}
       <div className="text-center mt-4">
         <Link to="/Chat">Tillbaka till Chat</Link>

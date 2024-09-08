@@ -50,7 +50,7 @@ const Profile = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Nätverksresponsen var inte okej.');
       }
 
       const data = await response.json();
@@ -58,11 +58,11 @@ const Profile = () => {
 
       setAvatar(imageUrl);
       setAvatarPreview(imageUrl);
-      toast.success('Image uploaded successfully!');
+      toast.success('Bild uppladdad framgångsrikt!');
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error('Uppladdning misslyckades:', error);
       Sentry.captureException(error); 
-      toast.error('Upload failed: ' + error.toString());
+      toast.error('Uppladdning misslyckades: ' + error.toString());
     }
   };
 
@@ -89,11 +89,11 @@ const Profile = () => {
       sessionStorage.setItem('email', email);
       sessionStorage.setItem('username', username);
       
-      alert('Profile updated successfully');
+      alert('Profilen uppdaterades framgångsrikt.');
       navigate('/Chat');
     } catch (error) {
       Sentry.captureException(error); 
-      console.error('Error updating profile:', error);
+      console.error('Fel vid uppdatering av profil:', error);
       if (error.response) {
         console.error('Response data:', error.response.data);
         console.error('Response status:', error.response.status);
@@ -117,12 +117,12 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      alert('Your account has been successfully deleted.');
+      alert('Ditt konto har raderats framgångsrikt.');
       sessionStorage.clear();
       localStorage.clear();
       navigate('/Login');
     } catch (error) {
-      console.error('Error deleting user account', error);
+      console.error('Fel vid radering av användarkonto.', error);
       Sentry.captureException(error); 
     }
   };

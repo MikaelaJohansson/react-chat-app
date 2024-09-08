@@ -136,7 +136,7 @@ const Chat = () => {
           }
         });
 
-        console.log('Invitation sent successfully:', response.data);
+        console.log('Inbjudan skickades framgångsrikt:', response.data);
         console.log(cryptoId,userId);
        
         const newInvite = { username: userId, conversationId: cryptoId,sentBy: loggedInUserId };
@@ -149,14 +149,14 @@ const Chat = () => {
 
         setUserId('');
 
-        console.info('Invitation sent successfully:', response.data);
+        console.info('Inbjudan skickad framgångsrikt:', response.data);
        
       } catch (error) {
-        console.error('Error sending invitation:', error);
-        Sentry.captureMessage('Error sending invitation', 'error');
+        console.error('Fel vid sändning av inbjudan:', error);
+        Sentry.captureMessage('Fel vid sändning av inbjudan.', 'error');
       }
     } else {
-      alert('Please enter a valid user ID.');
+      alert('Ange ett giltigt användar-ID.');
     }
   };
 
@@ -176,23 +176,35 @@ const Chat = () => {
 
   const retrieveInvitations = () => {
     const jwtToken = sessionStorage.getItem('token');
-
+  
     if (!jwtToken) {
-      console.error('No token found in session storage.');
+      console.error('Ingen token hittades i sessionslagringen.');
       return;
     }
-
+  
     try {
       const decodedToken = jwtDecode(jwtToken);
       const inviteString = decodedToken.invite || "[]";
       const invites = JSON.parse(inviteString);
-      setReceivedInvites(Array.isArray(invites) ? invites : []);
-      console.log('Retrieved invitations:', invites);
+  
+      const uniqueInvites = invites.reduce((acc, current) => {
+        const exists = acc.find(item => item.username === current.username);
+        
+        if (!exists) {
+          acc.push(current);
+        }
+  
+        return acc;
+      }, []);
+  
+      setReceivedInvites(Array.isArray(uniqueInvites) ? uniqueInvites : []);
+      console.log('Hämtade inbjudningar:', uniqueInvites);
     } catch (error) {
-      Sentry.captureMessage('Error decoding JWT or parsing invites', 'error');
-      console.error('Error decoding JWT or parsing invites:', error);
+      Sentry.captureMessage('Fel vid avkodning av JWT eller vid tolkning av inbjudningar.', 'error');
+      console.error('Fel vid avkodning av JWT eller vid bearbetning av inbjudningar:', error);
     }
   };
+  
 
   const handleInviteSelect = (invite) => {
     setSelectedInvite(invite);
